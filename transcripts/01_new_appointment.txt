@@ -1,0 +1,29 @@
+Scenario: Simple new appointment scheduling (01_new_appointment)
+Caller persona: Maria Chen
+Call SID: CA37aa13d1b13281017b20686ce4fcc046
+Started: 2026-07-18 22:50:22
+------------------------------------------------------------
+
+[00:00.00] SYSTEM: Call started (streamSid=MZ7cc64a47c4bb08ebc50f524ecdd40189, callSid=CA37aa13d1b13281017b20686ce4fcc046)
+[00:04.41] AGENT: This call may be recorded for quality and training purposes.
+[00:06.90] AGENT: Para español, oprima el dos.
+[00:07.32] CALLER (bot): Presiono el 2 para Español.
+[00:10.42] AGENT: Thank you for calling Pivot Point Orthopedics.
+[00:13.13] AGENT: Would you like to create a demo patient profile?
+[00:15.54] AGENT: I just need your first and last name to get started.
+[00:17.02] CALLER (bot): Alright, let me think of a name to get started.Mi nombre es Maria Chen. Y después de esto, me gustaría hablar sobre programar mi chequeo de rutina para la próxima semana.
+[00:35.82] AGENT: Your patient profile is set up and your date of birth is July 4th, 2000 for demo purposes. How may I help you today?
+[00:37.20] CALLER (bot): Thanks so much. I’d like to schedule a routine check-up with a doctor sometime next week. I’m not picky about the exact day, but something in that general window would be perfect. Are there any open slots you can suggest?
+[00:58.00] AGENT: Let me check the schedule for routine check-up appointments with a doctor next week. I'll find some available options for you.
+[00:59.04] CALLER (bot): Okay, thank you. I appreciate you checking for me. Next week sounds good, so whatever openings you have for a routine check-up are fine. What times are available?
+[01:18.94] AGENT: We have several openings next week. Would you prefer to see Dr. Zbigniew Lekowski or Dr. Kelly Noble, or is either one fine for your routine checkup?
+[01:20.21] CALLER (bot): Either one sounds fine to me. I don’t have a strong preference, so you can book whichever of Dr. Zbigniew or Dr. Kelly Noble has an opening next week. Just let me know the time and date, and I’ll be ready. Thanks!
+[01:30.79] AGENT: Great! Here are a few options for Tuesday, July 21st: 9:00 AM, 10:00 AM, or 2:00 PM.
+[01:32.32] AGENT: Would any of these work for you?
+[01:33.36] CALLER (bot): Yes, 10 AM on Tuesday, July 21st works for me. Just let me know if you need anything else before the appointment. Thank you!
+[02:02.86] AGENT: Your appointment is set for Tuesday, July 21st at 10am with Dr. Zbigniew Lekowski at Pivot Point Orthopedics. Please bring your photo ID, insurance card, a list of current medications, and any imaging discs if you have them. If you need anything else before your visit, just let me know.
+[02:04.73] CALLER (bot): Perfect, thank you for confirming. I’ll bring my photo ID, insurance card, a list of my current medications, and imaging discs if I have any. That should be good. I’ll arrive on July 21st at 10 AM with Dr. Zbigniew Laskowski. Thanks again!
+[02:31.34] AGENT: You're all set for Tuesday, July 21 at 10:00 AM with Dr. Zbigniew Lukasik. We look forward to seeing you then!
+[02:32.45] AGENT: Have a great day!
+[02:33.23] CALLER (bot): Thanks so much. I really appreciate it. I’ll see you next Tuesday for my routine check-up. Have a great day!
+[02:36.15] SYSTEM: Twilio sent stop event
