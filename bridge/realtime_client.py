@@ -120,6 +120,18 @@ class RealtimeClient:
         """Ask the bot to speak first (used when it should open the call)."""
         await self._send({"type": "response.create"})
 
+    def has_active_audible_response(self):
+        """True if a response is currently generating AND has produced at
+        least one real (non-commentary) audio delta -- i.e. there's
+        genuinely something audible in flight that a barge-in would need to
+        stop. False for a response that hasn't started talking yet, or one
+        that's already finished (response.done already fired), even if
+        Twilio hasn't necessarily finished physically playing every queued
+        byte -- see clear()'s docstring in bridge/server.py for why that
+        second case is intentionally NOT treated as needing a flush.
+        """
+        return self._response_in_progress and self._response_has_audio
+
     async def cancel_response(self):
         """Stop the model from continuing to generate the in-flight response.
 
@@ -136,7 +148,7 @@ class RealtimeClient:
         finishing that (often near-empty) response first, surfacing as a
         benign but noisy "no active response found" error.
         """
-        if self._response_in_progress and self._response_has_audio:
+        if self.has_active_audible_response():
             await self._send({"type": "response.cancel"})
 
     def _track_item_phases(self, event):

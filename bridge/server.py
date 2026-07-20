@@ -131,22 +131,32 @@ async def media_stream(websocket: WebSocket):
                         )
 
                 elif etype == "input_audio_buffer.speech_started":
-                    # Barge-in: the healthcare agent started talking. Flush
-                    # whatever of our bot's audio Twilio still has queued so
-                    # it stops immediately instead of talking over them, AND
-                    # tell the model itself to stop generating that response
-                    # -- flushing Twilio alone leaves the model composing (and
-                    # us transcribing) a turn that was already cut off on the
-                    # audio side, so the transcript stops matching what was
-                    # actually said and "response in progress" never clears.
-                    await websocket.send_text(
-                        json.dumps({"event": "clear", "streamSid": stream_sid})
-                    )
-                    await realtime.cancel_response()
-                    # Same signal is the agent's response-latency endpoint --
-                    # RealtimeClient already computed the gap (negative if
-                    # this is a true mid-speech interrupt, i.e. our response
-                    # was still in flight) from right now.
+                    # Barge-in: the healthcare agent started talking. Only
+                    # flush Twilio's playback buffer and cancel the model's
+                    # response if our bot is actually mid-response with
+                    # audible output right now -- clear() used to fire
+                    # unconditionally on every speech_started regardless of
+                    # response state, which meant it would also clip the
+                    # tail of an already-COMPLETED utterance any time the
+                    # agent replied before Twilio finished physically
+                    # playing out the last buffered bytes. That's what was
+                    # producing the widespread audio/transcript mismatch
+                    # (iteration.md Issue 9) -- the model's own transcript
+                    # always reflects the full text it generated, so an
+                    # unconditional clear silently truncates the AUDIO half
+                    # of that pair without the transcript ever knowing.
+                    # Skipping clear when nothing is genuinely in flight
+                    # accepts a small risk (a few hundred ms of trailing
+                    # audio might overlap the agent's next line) in exchange
+                    # for no longer clipping completed turns wholesale.
+                    if realtime.has_active_audible_response():
+                        await websocket.send_text(
+                            json.dumps({"event": "clear", "streamSid": stream_sid})
+                        )
+                        await realtime.cancel_response()
+                    # Gap tracking happens regardless of whether we cleared/
+                    # cancelled anything -- RealtimeClient already computed
+                    # it (negative if this is a true mid-speech interrupt).
                     pending_gap_ms = realtime.last_gap_ms
                     pending_gap_is_interrupt = realtime.last_gap_is_interrupt
                     pending_gap_ms_audio = realtime.last_gap_ms_audio

@@ -225,7 +225,61 @@ Audio-byte tracking (Issue 7) now skips commentary items entirely.
 Twilio, and skip transcript accumulation/flush, for any event belonging to
 a commentary item. Only `final_answer` content is ever spoken or logged.
 **Verified:** offline synthetic test confirming commentary bytes/audio are
-excluded from tracking while final_answer bytes still count correctly. Not
-yet confirmed against a real call -- next run should show single, clean
-CALLER (bot) lines with no glued-together double-sentences, and the Issue 7
-divergence count should drop sharply if this was indeed the main driver.
+excluded from tracking while final_answer bytes still count correctly.
+Confirmed against call 6 (below) -- no more glued double-sentences, so the
+commentary leak itself is fixed. That call then surfaced Issue 9, a
+separate, pre-existing bug the commentary fix didn't touch.
+
+---
+
+## Issue 9: `clear` fired unconditionally, clipping already-completed turns
+**Found in:** Call 6 (CA87ef8d89acd683a7c742760472f5e638) -- user reported,
+by ear against the recording, that nearly every CALLER (bot) line in the
+call was audibly cut off partway through, not matching the logged text.
+Issue 7's audio-byte cross-check independently corroborated this with 5
+large disagreements (event-based vs audio-based gap off by 3-10+ seconds),
+this time with no commentary-phase confound (Issue 8 was already fixed).
+**Root cause:** `clear` (the Twilio playback-buffer flush sent on every
+`input_audio_buffer.speech_started`) has fired unconditionally since it was
+introduced in Issue 4 -- unlike `cancel_response()`, which was gated on
+`_response_in_progress and _response_has_audio`. This meant that even when
+our bot's response had already fully COMPLETED (response.done already
+fired), any agent speech shortly after would still send `clear`, sometimes
+clipping the tail of audio Twilio hadn't finished physically playing yet.
+Because the transcript is built from the model's OWN account of what it
+generated (response.output_audio_transcript.*), not from what Twilio
+actually played, this clipping was invisible in the transcript text -- it
+always showed the full sentence regardless of what was cut on the audio
+side. This is a distinct, pre-existing bug from Issues 4/5/8 -- those fixed
+*detection/cancellation* of genuine mid-response interrupts; this one is
+about a flush firing when there was no genuine interrupt at all.
+**Fix:** `bridge/realtime_client.py` -- added `has_active_audible_response()`
+(response in progress AND has produced real, non-commentary audio),
+refactored `cancel_response()` to use it. `bridge/server.py` -- `clear` is
+now only sent when `has_active_audible_response()` is true, exactly
+matching `cancel_response()`'s existing gate, instead of firing on every
+speech_started regardless of state.
+**Note on the `response_cancel_not_active` error also seen in call 6:**
+investigated per the user's hypothesis that it might be causing/correlated
+with the clipping -- ruled out. That error fires when we send
+`response.cancel` for a response OpenAI's server had already ended on its
+own (the Issue 5 phantom-response race); by definition, a cancel that fails
+with "no active response" had zero effect on anything, so it can't have
+clipped audio itself. It's a harmless, already-understood symptom of a
+different (Issue 5) race, not the cause of Issue 9.
+**Which prior calls' turn-taking data this affects:** `clear` has fired
+unconditionally since Issue 4, i.e. every call in iteration_02 through
+iteration_06 could have some degree of this clipping -- iteration_01 and
+iteration_02 predate gap tracking entirely so it's unmeasurable for them
+either way. Only iteration_05 and iteration_06 have audio-byte cross-check
+data at all; iteration_05's numbers are additionally confounded by Issue 8
+(commentary bytes inflating the totals), so it can't cleanly isolate this
+bug. iteration_06 is the first clean read on Issue 9 specifically. None of
+this affects BUG_REPORT.md findings about the target agent's own speech
+(DOB handling, doctor name spelling, Spanish IVR, etc.) -- those come from
+`conversation.item.input_audio_transcription.completed`, which reflects the
+agent's audio, not ours, and was never touched by this bug.
+**Verified:** offline test confirming has_active_audible_response() is
+False for a completed response, True for one still generating audio, and
+False for a phantom (created, no audio yet) response. Not yet confirmed
+against a live call.
