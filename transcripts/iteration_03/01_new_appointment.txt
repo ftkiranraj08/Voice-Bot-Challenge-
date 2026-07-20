@@ -1,0 +1,45 @@
+Scenario: Simple new appointment scheduling (01_new_appointment)
+Caller persona: Maria Chen
+Call SID: CAa53e8d9d4e063b1a0fc64bc96647277a
+Started: 2026-07-19 23:45:10
+------------------------------------------------------------
+
+[00:00.00] SYSTEM: Call started (streamSid=MZc8853482b7597df0d29b3efb87a5ff34, callSid=CAa53e8d9d4e063b1a0fc64bc96647277a)
+[00:04.73] AGENT: (gap: -167ms, MID-SPEECH INTERRUPT) This call may be recorded for quality and training purposes.
+[00:04.74] SYSTEM: OpenAI realtime error: {'type': 'invalid_request_error', 'code': 'response_cancel_not_active', 'message': 'Cancellation failed: no active response found', 'param': None, 'event_id': None}
+[00:07.24] AGENT: (gap: -151ms, MID-SPEECH INTERRUPT) Para español, oprima el dos.
+[00:07.24] SYSTEM: OpenAI realtime error: {'type': 'invalid_request_error', 'code': 'response_cancel_not_active', 'message': 'Cancellation failed: no active response found', 'param': None, 'event_id': None}
+[00:13.58] AGENT: Thanks for calling Pivot Point Orthopedics, part of Pretty Good AI, how may I help you today?
+[00:14.94] CALLER (bot): Hi, I’m calling to schedule a routine check-up with a doctor. I’m pretty flexible, sometime next week would work for me. Could you let me know what your availability looks like?
+[00:25.80] AGENT: (gap: 6094ms) I see you're calling from the number we have on file. Am I speaking with Maria?
+[00:26.62] CALLER (bot): Yes, this is Maria. I’m calling from the number you have on file. I’m looking to schedule a routine check-up next week, if that’s available.
+[00:30.60] AGENT: (gap: 1873ms) Please provide your date of birth.
+[00:31.10] CALLER (bot): Sure, it’s April 12th, 1987.
+[00:48.25] AGENT: (gap: 7315ms) Thanks, Maria! You mentioned wanting a routine check-up. Just to confirm, are you looking to book a general office visit for your routine care?
+[00:48.82] CALLER (bot): Yes, that’s right. I’d like to book a general office visit for routine care.
+[00:57.91] AGENT: (gap: 3658ms) Do you have a specific doctor you'd like to see, or are you open to any available provider?
+[00:58.83] CALLER (bot): I’m open to any available provider for this. I just need the routine check-up, so whoever has availability next week is fine.
+[01:28.03] AGENT: (gap: 24546ms) Let me try fetching the available appointments again for you, one moment.
+[01:28.63] CALLER (bot): Okay, take your time. I’m here and ready to grab whatever slot you find.
+[01:30.00] AGENT: (gap: 43ms) It looks like
+[01:31.40] CALLER (bot): Let me know what you find, and we can go from there.Got it, thanks for taking another look. I’m ready whenever you are. If there’s a time next week, you think would work, just give me the details and we can get it set up.
+[01:31.79] SYSTEM: OpenAI realtime error: {'type': 'invalid_request_error', 'code': 'response_cancel_not_active', 'message': 'Cancellation failed: no active response found', 'param': None, 'event_id': None}
+[01:42.07] AGENT: (gap: -99ms, MID-SPEECH INTERRUPT) It appears you already have a routine check-up scheduled. If you'd like, I can help you reschedule or cancel that appointment, or I can connect you to a team member for further assistance.
+[01:42.09] SYSTEM: OpenAI realtime error: {'type': 'invalid_request_error', 'code': 'response_cancel_not_active', 'message': 'Cancellation failed: no active response found', 'param': None, 'event_id': None}
+[01:43.29] AGENT: What would you prefer?
+[01:45.81] CALLER (bot): If you have something already scheduled, I’d actually prefer to keep it unless we need to change it. But since I mentioned a routine check-up, if you can reschedule it for next week, that’d be great. If that’s not possible, I’d still like to keep the current appointment. Either way, I’m happy to talk to a team member if needed.
+[01:59.36] AGENT: (gap: 6366ms) You're all set and there's nothing you need to change right now. If you have any other questions or need help in the future, just let us know.
+[02:00.16] CALLER (bot): Okay, thanks so much for confirming. That’s great for now. I appreciate your help, and I’ll just keep that appointment as it is. Have a good day!
+[02:07.93] AGENT: (gap: 4727ms) Glad I could help. Have a great day!
+[02:08.55] CALLER (bot): Perfect, thank you again. I really appreciate your help and the time you took. Have a great day!
+[02:11.48] SYSTEM: Twilio sent stop event
+
+------------------------------------------------------------
+Turn-taking summary:
+  Turns measured: 11
+  Average gap: 4928ms
+  Flagged: 1 short gap(s), 3 mid-speech interrupt(s)
+    [00:04.73] gap=-167ms MID-SPEECH INTERRUPT
+    [00:07.24] gap=-151ms MID-SPEECH INTERRUPT
+    [01:30.00] gap=43ms SHORT GAP
+    [01:42.07] gap=-99ms MID-SPEECH INTERRUPT

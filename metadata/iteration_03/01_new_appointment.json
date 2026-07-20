@@ -1,0 +1,11 @@
+{
+  "call_label": "01_new_appointment",
+  "scenario_id": "01_new_appointment",
+  "scenario_name": "Simple new appointment scheduling",
+  "probe": "Baseline happy path -- does the agent collect the right info and confirm a booking?",
+  "call_sid": "CAa53e8d9d4e063b1a0fc64bc96647277a",
+  "started_at": 1784519110.02613,
+  "duration_sec": 136.1,
+  "call_status": "completed",
+  "recording_path": "/Users/kiran/Desktop/PrettyGoodAI/recordings/01_new_appointment.mp3"
+}
