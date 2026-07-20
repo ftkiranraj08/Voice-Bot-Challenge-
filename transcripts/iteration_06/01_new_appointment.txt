@@ -1,0 +1,65 @@
+Scenario: Simple new appointment scheduling (01_new_appointment)
+Caller persona: Maria Chen
+Call SID: CA87ef8d89acd683a7c742760472f5e638
+Started: 2026-07-20 01:20:46
+------------------------------------------------------------
+
+[00:00.00] SYSTEM: Call started (streamSid=MZeebe8abb6f8dc48515e21e510b206a7d, callSid=CA87ef8d89acd683a7c742760472f5e638)
+[00:04.81] AGENT: This call may be recorded for quality and training purposes.
+[00:07.42] AGENT: Para español, oprima el dos.
+[00:13.38] AGENT: Thanks for calling Pivot Point Orthopedics, part of Pretty Good AI. How may I help you today?
+[00:14.63] CALLER (bot): Hi, I’m calling to schedule a routine check-up with a doctor. I don’t have a strong preference for a specific day, just sometime next week if that’s possible. Could you let me know what times are available?
+[00:23.67] AGENT: I see you're calling from the number we have on file.
+[00:25.25] AGENT: Am I speaking with Maria?
+[00:26.15] CALLER (bot): Yes, this is Maria. I’m looking to schedule a routine check-up sometime next week if that’s possible. Could you see what openings you have?
+[00:30.67] AGENT: (gap: 1705ms, audio-check: -5586ms) Please provide your date of birth.
+[00:31.16] CALLER (bot): Sure, my date of birth is March 14, 1988.
+[00:40.14] AGENT: Thanks, Maria.
+[00:48.50] AGENT: You'd like to schedule a routine check-up with a doctor, correct? Just confirming, this would be a general office visit for routine care, is that right?
+[00:49.41] CALLER (bot): Yes, exactly. This would be a general office visit for a routine check-up, just confirming. And sometime next week works well for me, so please let me know what options you have.
+[00:56.72] AGENT: (gap: 2349ms, audio-check: -7870ms) Do you have a specific doctor you'd like to see, or are you open to any available provider?
+[00:57.89] CALLER (bot): I’m open to any available provider. As long as it’s a routine check-up, I’m fine with whoever is available. If you could share a couple of options next week, that would be great.
+[01:04.72] AGENT: We have openings this week and early next week.
+[01:07.72] AGENT: Do you have a preferred day or time of day for your appointment?
+[01:09.22] CALLER (bot): I don’t have a strong preference for a specific day or time, just sometime next week. If early next week works and you have openings, I’m fine with that. If you could give me a couple of options, I can pick one.
+[01:20.17] AGENT: Let me check next week's openings for you.
+[01:26.18] AGENT: Let me check for available routine checkup appointments with any provider starting next week. One moment.
+[01:26.91] CALLER (bot): Thanks for checking. I can hold for a moment. If there are a couple of options, I’d be happy to choose. Just let me know what you find.
+[01:34.44] AGENT: (gap: 2110ms, audio-check: -4403ms) You're welcome. I'm searching for available slots now and will let you know what's open shortly.
+[01:35.23] CALLER (bot): Okay, thanks for checking. I appreciate you looking. If you find a few times next week, just let me know and I’ll choose one.
+[01:43.09] AGENT: I'm still checking for next week's openings.
+[01:46.11] AGENT: I'll share the available times as soon as I have them.
+[01:47.64] CALLER (bot): Sounds good. I’ll wait here. If it’s easier, you can just list the options, or give me a couple of times that you think look best. I’m flexible, so whatever works best for the clinic is fine with me.
+[01:51.30] AGENT: Thanks for your patience.
+[01:54.59] AGENT: I'll let you know as soon as I have the available appointment times.
+[01:55.59] CALLER (bot): Thanks for the update. I’ll stay on the line, or I can wait here—no rush. Just let me know when you have a couple of times available, and I’ll pick one.
+[02:02.54] AGENT: Perfect.
+[02:06.72] AGENT: I'll let you know as soon as I have the available options for your routine checkup.
+[02:07.45] CALLER (bot): Got it, thank you. I appreciate you checking. I’m ready whenever I hear back.
+[02:12.72] AGENT: (gap: 1740ms, audio-check: -2995ms) I'll update you as soon as I have the appointment times ready.
+[02:13.47] CALLER (bot): Sounds good. I’ll be ready whenever you have those appointment times ready. Thanks for working through that, and I’m looking forward to it.
+[02:17.27] AGENT: Thanks for waiting.
+[02:20.30] AGENT: I'll let you know as soon as I have the available slots.
+[02:21.65] CALLER (bot): Okay, thanks for waiting. I’m still here, and I can take a moment to look over the options once you have them. If there’s anything else you need from me—like a callback number or anything—I can share it. Just let me know.
+[02:26.18] AGENT: (gap: 1303ms, audio-check: -10531ms) I'll be right with you once I have the appointment options.
+[02:27.32] CALLER (bot): Thanks, I appreciate the update. I’ll be ready whenever you have the appointment options ready. Just let me know, and we can go over it together.
+[02:29.48] AGENT: Connecting you to a representative.
+[02:30.55] AGENT: Please wait.
+[02:31.08] CALLER (bot): Alright, I can wait. Thanks for connecting me. I’m here when they’re ready.
+[02:31.15] SYSTEM: OpenAI realtime error: {'type': 'invalid_request_error', 'code': 'response_cancel_not_active', 'message': 'Cancellation failed: no active response found', 'param': None, 'event_id': None}
+[02:35.52] AGENT: (gap: -849ms, MID-SPEECH INTERRUPT) Hello, you've reached the Pretty Good AI test line. Goodbye.
+[02:35.89] CALLER (bot): Thanks for the call. I appreciate it. Goodbye.
+[02:44.05] SYSTEM: Twilio sent stop event
+
+------------------------------------------------------------
+Turn-taking summary:
+  Turns measured: 6
+  Average gap: 1393ms
+  Flagged: 0 short gap(s), 1 mid-speech interrupt(s)
+    [02:35.52] gap=-849ms MID-SPEECH INTERRUPT
+  Gap-method disagreement (>300ms, event-based vs audio-byte-based): 5
+    [00:30.67] event-based=1705ms audio-based=-5586ms -- possible clipped audio
+    [00:56.72] event-based=2349ms audio-based=-7870ms -- possible clipped audio
+    [01:34.44] event-based=2110ms audio-based=-4403ms -- possible clipped audio
+    [02:12.72] event-based=1740ms audio-based=-2995ms -- possible clipped audio
+    [02:26.18] event-based=1303ms audio-based=-10531ms -- possible clipped audio
