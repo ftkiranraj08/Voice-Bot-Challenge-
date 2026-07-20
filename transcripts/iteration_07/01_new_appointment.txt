@@ -1,0 +1,47 @@
+Scenario: Simple new appointment scheduling (01_new_appointment)
+Caller persona: Maria Chen
+Call SID: CAd9422b084c78a10a54e230bba6d5ddf5
+Started: 2026-07-20 10:06:44
+------------------------------------------------------------
+
+[00:00.00] SYSTEM: Call started (streamSid=MZ29fc3adaccdff6250878570bbbd6d4bf, callSid=CAd9422b084c78a10a54e230bba6d5ddf5)
+[00:04.64] AGENT: This call may be recorded for quality and training purposes.
+[00:07.01] AGENT: Para español, oprima el dos.
+[00:13.23] AGENT: Thanks for calling Pivot Point Orthopedics, part of Pretty Good AI. How may I help you today?
+[00:14.45] CALLER (bot): Hi, this is Maria Chen. I’d like to schedule a routine check-up sometime next week. I don’t have a strong preference for a specific day or time, so whatever works best is fine. Please let me know what available slots you have. Thank you.
+[00:29.18] AGENT: (gap: 12329ms, audio-check: -64ms) Please provide your date of birth.
+[00:29.80] CALLER (bot): My date of birth is January 5, 1990.
+[00:50.08] AGENT: (gap: 8776ms, audio-check: 5594ms) Just to confirm, I have your name as Maria Chen and your date of birth as January 5th, 1990. Is that correct? If so, please spell your first and last name for me.
+[00:50.21] CALLER (bot): Yes, that’s correct. My name is Maria Chen. That’s M-A-R-I-A, and C-H-E-N.
+[00:55.54] AGENT: (gap: 2191ms, audio-check: -5626ms) Could you please spell your first and last name for me?
+[00:56.38] CALLER (bot): Sure, it’s M-A-R-I-A, and C-H-E-N.
+[01:01.78] AGENT: (gap: 2259ms, audio-check: -977ms) Could you please spell your last name, Chen?
+[01:02.48] CALLER (bot): Sure, it’s spelled C-H-E-N.
+[01:16.18] AGENT: Would you like to use your phone number to look up your record? If so, please provide the number you have on file with us.
+[01:20.82] AGENT: If you're not sure, let me know and we can confirm your name and date of birth again.
+[01:22.88] CALLER (bot): I’m not totally sure, but the number I have on file with you is 555-987-6543. If that’s not the correct number, we can stick with confirming my name and date of birth instead.
+[01:47.01] AGENT: (gap: 14832ms, audio-check: 2279ms) No problem. Let's confirm your details one more time. Please spell your first and last name and state your date of birth again.
+[01:47.71] CALLER (bot): Sure, it’s M-A-R-I-A, and C-H-E-N. My date of birth is January 5, 1990.
+[02:12.84] AGENT: I'm unable to verify your information right now, so I can't proceed further. I can connect you to our patient support team for help?
+[02:14.39] AGENT: Would you like me to transfer you?
+[02:16.00] CALLER (bot): Yes, please. A transfer to the patient support team would be great. I understand verification can be tricky, so I’m happy to wait and follow their guidance. Thank you.
+[02:27.42] AGENT: Connecting you to a representative.
+[02:28.44] AGENT: Please wait.
+[02:28.91] CALLER (bot): Okay, I’m here and waiting. I can hold for the representative.
+[02:28.98] SYSTEM: OpenAI realtime error: {'type': 'invalid_request_error', 'code': 'response_cancel_not_active', 'message': 'Cancellation failed: no active response found', 'param': None, 'event_id': None}
+[02:33.95] AGENT: (gap: -901ms, MID-SPEECH INTERRUPT) Hello, you've reached the Pretty Good AI test line. Goodbye.
+[02:34.16] CALLER (bot): Goodbye, thanks for your help.
+[02:40.77] SYSTEM: Twilio sent stop event
+
+------------------------------------------------------------
+Turn-taking summary:
+  Turns measured: 6
+  Average gap: 6581ms
+  Flagged: 0 short gap(s), 1 mid-speech interrupt(s)
+    [02:33.95] gap=-901ms MID-SPEECH INTERRUPT
+  Gap-method disagreement (>300ms, event-based vs audio-byte-based): 5
+    [00:29.18] event-based=12329ms audio-based=-64ms -- possible clipped audio
+    [00:50.08] event-based=8776ms audio-based=5594ms -- possible clipped audio
+    [00:55.54] event-based=2191ms audio-based=-5626ms -- possible clipped audio
+    [01:01.78] event-based=2259ms audio-based=-977ms -- possible clipped audio
+    [01:47.01] event-based=14832ms audio-based=2279ms -- possible clipped audio
