@@ -83,7 +83,9 @@ nothing needs cancelling. `bridge/server.py` -- added a ~2.5s grace window
 (`TRAILING_EVENTS_GRACE_SEC`) after Twilio's "stop" before tearing down the 
 OpenAI-listening task, so trailing events already in flight can still be 
 captured.
-**Verified:** [pending re-run / call XX]
+**Verified:** Call 01, 4th run (CA3c543cef5ea014396e3f9c01733fa005) -- trailing 
+agent lines and full-sentence caller-bot lines both present, no dropped 
+duration (~2:25, in line with prior clean runs).
 
 ---
 
@@ -103,22 +105,30 @@ Issue 4's fix this was harmless (nothing to actually cut off); after it,
 every one of these phantom responses gets flagged as a false MID-SPEECH 
 INTERRUPT and triggers a `response.cancel` against a response that's often 
 already ended server-side, producing the `response_cancel_not_active` 
-errors. Root trigger for the phantom response itself is still unconfirmed 
-(candidates: our own opening-watchdog firing before real audio is flowing, 
-or the model's server-VAD reacting to a brief non-speech blip at call 
-connect) -- temporary debug logging added to pin this down on the next run.
-**Fix (partial):** `bridge/realtime_client.py` -- gate both interrupt 
-detection and `cancel_response()` on the response having actually produced 
-an audio delta (`_response_has_audio`), not just on `response.created` 
-having fired. A response with no audio yet has nothing audible to 
-interrupt, so it's no longer flagged or cancelled. `bridge/server.py` -- 
-added temporary `[debug]` print logging for `response.created`/
-`response.done` (elapsed time, id, status, output item count) to capture 
-the phantom response's timing on the next call, to decide whether the 
-root cause needs a separate fix (e.g. tuning VAD threshold, or not treating 
-Twilio's earliest media frames as "audio heard" for the opening-watchdog).
-**Verified:** [pending re-run / call XX -- also need one more run with 
-debug logging to confirm/rule out the opening-watchdog theory]
+errors. Confirmed via temporary debug logging (call 4, CA3c543cef5ea014396e3f9c01733fa005): 
+a `response.created`/`response.done` pair 60ms apart, status `cancelled`, 
+`output_items=0`, lining up with the agent speaking two utterances back to 
+back (no caller-bot turn in between). Our own gated `cancel_response()` 
+couldn't have caused it (no audio had been produced yet to satisfy the gate 
+added below) -- this is OpenAI's own server-side turn-detection auto-
+cancelling a response it hadn't started yet when new input arrives, 
+independent of anything we send. Our manual `response.cancel` (Issue 4) was 
+occasionally racing that same server-side cancellation, which is what 
+produced the `response_cancel_not_active` errors.
+**Fix:** `bridge/realtime_client.py` -- gate both interrupt detection and 
+`cancel_response()` on the response having actually produced an audio delta 
+(`_response_has_audio`), not just on `response.created` having fired. A 
+response with no audio yet has nothing audible to interrupt, so it's no 
+longer flagged, and we no longer race the server's own auto-cancellation by 
+sending a redundant one. `bridge/server.py` -- temporary `[debug]` print 
+logging for `response.created`/`response.done` confirmed the above and has 
+been removed now that it's served its purpose.
+**Verified:** Call 01, 4th run (CA3c543cef5ea014396e3f9c01733fa005) -- 0 
+short gaps, 0 mid-speech interrupts, 0 `response_cancel_not_active` errors 
+(down from 1 short gap + 3 interrupts + 4 errors in the 3rd run), and the 
+two opening agent lines that were falsely flagged as interrupts before 
+(00:04, 00:07) now carry no gap annotation at all, as expected for a 
+pre-audio phantom response.
 
 ---
 
@@ -149,5 +159,7 @@ hundred ms of already-buffered-but-unplayed audio might get flushed by
 Twilio's `clear` after the model already committed to generating text for 
 it. That's a small, structural gap in a live-audio system, not something 
 worth engineering around further right now.
-**Verified:** [pending re-run / call XX with a genuine mid-speech interrupt 
-to confirm the cancelled turn's partial line still appears]
+**Verified:** [still pending -- call 4 (CA3c543cef5ea014396e3f9c01733fa005) had 
+zero genuine mid-speech interrupts, so this safety net wasn't exercised. 
+Needs a run with a real interrupt (e.g. scenario 10_interruption_barge_in) 
+to confirm the cancelled turn's partial line still shows up.]
