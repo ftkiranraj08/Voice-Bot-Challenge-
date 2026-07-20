@@ -117,15 +117,18 @@ async def media_stream(websocket: WebSocket):
                 etype = event.get("type")
 
                 if etype == "response.output_audio.delta":
-                    await websocket.send_text(
-                        json.dumps(
-                            {
-                                "event": "media",
-                                "streamSid": stream_sid,
-                                "media": {"payload": event["delta"]},
-                            }
+                    # Skip 'commentary' (reasoning) items entirely -- only
+                    # the model's final_answer should ever reach the call.
+                    if not realtime.is_commentary(event):
+                        await websocket.send_text(
+                            json.dumps(
+                                {
+                                    "event": "media",
+                                    "streamSid": stream_sid,
+                                    "media": {"payload": event["delta"]},
+                                }
+                            )
                         )
-                    )
 
                 elif etype == "input_audio_buffer.speech_started":
                     # Barge-in: the healthcare agent started talking. Flush
@@ -163,9 +166,11 @@ async def media_stream(websocket: WebSocket):
                     transcript.flush("caller_bot")
 
                 elif etype == "response.output_audio_transcript.delta":
-                    transcript.append_delta("caller_bot", event.get("delta", ""))
+                    if not realtime.is_commentary(event):
+                        transcript.append_delta("caller_bot", event.get("delta", ""))
                 elif etype == "response.output_audio_transcript.done":
-                    transcript.flush("caller_bot")
+                    if not realtime.is_commentary(event):
+                        transcript.flush("caller_bot")
 
                 elif etype == "conversation.item.input_audio_transcription.completed":
                     transcript.add_line(

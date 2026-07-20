@@ -195,3 +195,37 @@ Not yet verified against a real call -- next run's transcript will show
 whether any real turns actually disagree by more than the threshold, which
 would be the first hard evidence of `clear` clipping legitimately-finished
 audio.
+
+---
+
+## Issue 8: caller-bot audibly narrated its own reasoning ('commentary' phase) on the call
+**Found in:** Call 5 (CA2b534ac582fda49489d45e7a79cd86e8) -- Issue 7's new
+audio-byte cross-check flagged 7 of 8 turns as diverging by seconds, far too
+large to be explained by Twilio buffer-clipping alone (a few hundred ms at
+most). Inspecting the debug event dump around the worst offender (-10375ms
+at 01:30.88) showed a single response with TWO sequential output items:
+one `phase: 'commentary'` ("Sure, I can provide that if needed—let me think
+this through.") and one `phase: 'final_answer'` (the actual answer). Both
+were synthesized to audio, both forwarded to Twilio, and both transcribed
+into the same line with no separator ("...let me think this through.Sure,
+the number on file is 555-0102...").
+**Root cause:** gpt-realtime-2.1(-mini)'s reasoning surfaces as a distinct
+`commentary` item before the real `final_answer` item, and the bridge
+treated every `response.output_audio.delta` / `response.output_audio_
+transcript.*` event identically regardless of which item/phase it belonged
+to -- so the model's internal reasoning was being spoken aloud to the
+healthcare agent and logged as something Maria actually meant to say. This
+alone likely explains most of the DOB/spell-your-name repetition pattern
+seen in earlier calls (the agent hearing ~2x longer, oddly-phrased turns)
+independent of any interruption/clipping question.
+**Fix:** `bridge/realtime_client.py` -- track each item's phase from
+`response.output_item.added` (`_item_phases`), expose `is_commentary(event)`.
+Audio-byte tracking (Issue 7) now skips commentary items entirely.
+`bridge/server.py` -- skip forwarding `response.output_audio.delta` to
+Twilio, and skip transcript accumulation/flush, for any event belonging to
+a commentary item. Only `final_answer` content is ever spoken or logged.
+**Verified:** offline synthetic test confirming commentary bytes/audio are
+excluded from tracking while final_answer bytes still count correctly. Not
+yet confirmed against a real call -- next run should show single, clean
+CALLER (bot) lines with no glued-together double-sentences, and the Issue 7
+divergence count should drop sharply if this was indeed the main driver.

@@ -62,6 +62,15 @@ class RealtimeClient:
         self._response_audio_started_at = None
         self.last_gap_ms_audio = None
 
+        # gpt-realtime-2.1(-mini) can emit a response as two sequential
+        # items: a 'commentary' item (the model's internal reasoning) and a
+        # 'final_answer' item (what it actually means to say). Both were
+        # being synthesized to audio and forwarded to the call, and both
+        # got glued into the transcript with no separator -- Maria was
+        # audibly narrating her own reasoning before every real answer.
+        # item_id -> phase, populated from response.output_item.added.
+        self._item_phases = {}
+
     async def connect(self):
         # GA API (post 2026-05-12 beta shutdown): no OpenAI-Beta header, model
         # still goes in the URL query param.
@@ -130,6 +139,23 @@ class RealtimeClient:
         if self._response_in_progress and self._response_has_audio:
             await self._send({"type": "response.cancel"})
 
+    def _track_item_phases(self, event):
+        if event.get("type") == "response.output_item.added":
+            item = event.get("item") or {}
+            item_id = item.get("id")
+            if item_id:
+                self._item_phases[item_id] = item.get("phase")
+
+    def is_commentary(self, event):
+        """True if this event belongs to a 'commentary' (reasoning) item
+        rather than the model's actual final_answer. Commentary is internal
+        reasoning that should never be played to the caller or logged as
+        something Maria said -- events with no known/tracked item_id (a
+        phase field that was never present) are treated as NOT commentary,
+        so we fail open rather than silently dropping real speech.
+        """
+        return self._item_phases.get(event.get("item_id")) == "commentary"
+
     def _track_turn_gap(self, event):
         etype = event.get("type")
         if etype == "response.created":
@@ -142,7 +168,7 @@ class RealtimeClient:
             self._response_audio_bytes = 0
             self._response_audio_started_at = None
             self._gap_captured_for_turn = False
-        elif etype == "response.output_audio.delta":
+        elif etype == "response.output_audio.delta" and not self.is_commentary(event):
             self._response_has_audio = True
             if self._response_audio_started_at is None:
                 self._response_audio_started_at = time.monotonic()
@@ -181,6 +207,7 @@ class RealtimeClient:
     async def events(self):
         async for raw in self.ws:
             event = json.loads(raw)
+            self._track_item_phases(event)
             self._track_turn_gap(event)
             yield event
 
