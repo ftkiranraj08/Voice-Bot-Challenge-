@@ -1,0 +1,50 @@
+Scenario: Simple new appointment scheduling (01_new_appointment)
+Caller persona: Maria Chen
+Call SID: CA2b534ac582fda49489d45e7a79cd86e8
+Started: 2026-07-20 00:34:42
+------------------------------------------------------------
+
+[00:00.00] SYSTEM: Call started (streamSid=MZ32952f70b4abb738231d55083f3d5202, callSid=CA2b534ac582fda49489d45e7a79cd86e8)
+[00:04.73] AGENT: This call may be recorded for quality and training purposes.
+[00:07.24] AGENT: Para español, oprima el dos.
+[00:14.20] AGENT: Thanks for calling Pivot Point Orthopedics, part of Pretty Good AI. How may I help you today?
+[00:15.59] CALLER (bot): Hi, this is Maria Chen. I’m calling to schedule a new routine check-up with a doctor. I don’t have a specific date I prefer, but sometime next week would be great if there’s availability. Please let me know what you can offer.
+[00:25.56] AGENT: (gap: 7318ms, audio-check: -6286ms) Please provide your date of birth.
+[00:25.88] CALLER (bot): My date of birth is January 14, 1991.
+[00:42.36] AGENT: Just to confirm, I have your name as Maria Chen and your date of birth as January 14, 1991.
+[00:46.45] AGENT: Is that correct? If so, please spell your first and last name for me.
+[00:47.06] CALLER (bot): Yes, that’s correct. My first name is spelled M-A-R-I-A, and my last name is spelled C-H-E-N.
+[00:52.21] AGENT: (gap: 1782ms, audio-check: -5631ms) Could you please spell your first and last name for me?
+[00:53.00] CALLER (bot): Sure, it’s Maria Chen. Maria is spelled M-A-R-I-A, and Chen is spelled C-H-E-N.
+[00:57.62] AGENT: (gap: 1760ms, audio-check: -5865ms) Toren spell your first and last name please.
+[00:58.32] CALLER (bot): Got it, it’s Maria Chen. Maria is spelled M-A-R-I-A, and Chen is spelled C-H-E-N.
+[01:03.66] AGENT: (gap: 1648ms, audio-check: -6865ms) Please spell out your first and last name when you are ready.
+[01:03.96] CALLER (bot): Maria Chen. That’s M-A-R-I-A, and C-H-E-N.
+[01:23.62] AGENT: (gap: 8983ms, audio-check: 4098ms) Would you like to use your phone number to look up your record? If so, please tell me the number you have on file with us. If you're not sure, let me know and I'll confirm your name and date of birth again.
+[01:24.74] CALLER (bot): Sure, I can provide that if needed—let me think this through.Sure, the number on file is 555-0102. If that helps, we can use it to pull up my records and get the appointment set up.
+[01:30.88] AGENT: (gap: 2881ms, audio-check: -10375ms) Please tell me the phone number you have on file with us.
+[01:31.13] CALLER (bot): The number on file with you is 555-0102.
+[01:45.59] AGENT: (gap: 9216ms, audio-check: 5411ms) Heather's phone number is 555-0102. Is that correct?
+[01:45.86] CALLER (bot): Yes, that’s correct. The number on file is 555-0102.
+[02:08.49] AGENT: I'm unable to verify your information right now. I can connect you to our patient support team for help with scheduling your check-up. Please stay on the line while I transfer you.
+[02:11.64] AGENT: Connecting you to a representative. Please wait
+[02:11.97] CALLER (bot): Thanks—I’ll stay on the line. I’m just looking forward to getting scheduled and getting that routine check-up booked.
+[02:12.03] SYSTEM: OpenAI realtime error: {'type': 'invalid_request_error', 'code': 'response_cancel_not_active', 'message': 'Cancellation failed: no active response found', 'param': None, 'event_id': None}
+[02:16.96] AGENT: (gap: -850ms, MID-SPEECH INTERRUPT) Hello, you've reached the Pretty Good AI test line. Goodbye.
+[02:17.03] CALLER (bot): Okay, thanks so much. Goodbye.
+[02:24.66] SYSTEM: Twilio sent stop event
+
+------------------------------------------------------------
+Turn-taking summary:
+  Turns measured: 8
+  Average gap: 4092ms
+  Flagged: 0 short gap(s), 1 mid-speech interrupt(s)
+    [02:16.96] gap=-850ms MID-SPEECH INTERRUPT
+  Gap-method disagreement (>300ms, event-based vs audio-byte-based): 7
+    [00:25.56] event-based=7318ms audio-based=-6286ms -- possible clipped audio
+    [00:52.21] event-based=1782ms audio-based=-5631ms -- possible clipped audio
+    [00:57.62] event-based=1760ms audio-based=-5865ms -- possible clipped audio
+    [01:03.66] event-based=1648ms audio-based=-6865ms -- possible clipped audio
+    [01:23.62] event-based=8983ms audio-based=4098ms -- possible clipped audio
+    [01:30.88] event-based=2881ms audio-based=-10375ms -- possible clipped audio
+    [01:45.59] event-based=9216ms audio-based=5411ms -- possible clipped audio
