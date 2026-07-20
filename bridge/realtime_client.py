@@ -6,6 +6,7 @@ forwarded back to Twilio) with no resampling/transcoding -- just base64
 passthrough.
 """
 
+import base64
 import json
 import os
 import time
@@ -19,6 +20,10 @@ OPENAI_REALTIME_URL = "wss://api.openai.com/v1/realtime"
 
 # A fixed voice keeps delivery consistent across all calls/scenarios.
 DEFAULT_VOICE = "alloy"
+
+# G.711 (audio/pcmu) is a fixed-rate codec: 8000 samples/sec, 1 byte/sample --
+# so audio duration in seconds is exactly byte_count / 8000, no estimation.
+G711_BYTES_PER_SEC = 8000
 
 
 class RealtimeClient:
@@ -46,6 +51,16 @@ class RealtimeClient:
         self._gap_captured_for_turn = True
         self.last_gap_ms = None
         self.last_gap_is_interrupt = False
+
+        # Cross-check on last_gap_ms: instead of trusting response.done's
+        # timestamp for "when did our bot finish talking", compute it from
+        # the actual audio generated (exact, via G711_BYTES_PER_SEC) rather
+        # than the model's own "I'm done" event. If the two disagree by a
+        # lot, that's evidence Twilio's `clear` clipped audio that hadn't
+        # finished playing yet even though the model considered itself done.
+        self._response_audio_bytes = 0
+        self._response_audio_started_at = None
+        self.last_gap_ms_audio = None
 
     async def connect(self):
         # GA API (post 2026-05-12 beta shutdown): no OpenAI-Beta header, model
@@ -124,9 +139,16 @@ class RealtimeClient:
             self._response_started_at = time.monotonic()
             self._response_in_progress = True
             self._response_has_audio = False
+            self._response_audio_bytes = 0
+            self._response_audio_started_at = None
             self._gap_captured_for_turn = False
         elif etype == "response.output_audio.delta":
             self._response_has_audio = True
+            if self._response_audio_started_at is None:
+                self._response_audio_started_at = time.monotonic()
+            delta = event.get("delta") or ""
+            if delta:
+                self._response_audio_bytes += len(base64.b64decode(delta))
         elif etype == "response.done":
             self._bot_stopped_at = time.monotonic()
             self._response_in_progress = False
@@ -135,17 +157,26 @@ class RealtimeClient:
             now = time.monotonic()
             if self._response_in_progress and self._response_started_at is not None and self._response_has_audio:
                 # Real mid-speech interrupt: our bot was audibly talking.
+                # Audio total isn't final mid-response, so no cross-check here.
                 self.last_gap_ms = round((self._response_started_at - now) * 1000)
                 self.last_gap_is_interrupt = True
+                self.last_gap_ms_audio = None
             elif not self._response_in_progress and self._bot_stopped_at is not None:
                 self.last_gap_ms = round((now - self._bot_stopped_at) * 1000)
                 self.last_gap_is_interrupt = False
+                if self._response_audio_started_at is not None:
+                    audio_duration_sec = self._response_audio_bytes / G711_BYTES_PER_SEC
+                    audio_finished_at = self._response_audio_started_at + audio_duration_sec
+                    self.last_gap_ms_audio = round((now - audio_finished_at) * 1000)
+                else:
+                    self.last_gap_ms_audio = None
             else:
                 # Either nothing to measure yet, or a response is in flight
                 # but hasn't produced audio -- not a real interrupt, and
                 # using a stale bot_stopped_at here would misattribute the gap.
                 self.last_gap_ms = None
                 self.last_gap_is_interrupt = False
+                self.last_gap_ms_audio = None
 
     async def events(self):
         async for raw in self.ws:

@@ -163,3 +163,35 @@ worth engineering around further right now.
 zero genuine mid-speech interrupts, so this safety net wasn't exercised. 
 Needs a run with a real interrupt (e.g. scenario 10_interruption_barge_in) 
 to confirm the cancelled turn's partial line still shows up.]
+
+---
+
+## Issue 7: added an audio-byte-based cross-check on gap_ms (not a bug fix -- new instrumentation)
+**Found in:** Discussion while reviewing call 4 -- user asked whether an
+unflagged agent line (01:48.26, the zero-output phantom response from Issue
+5) or the repeated date-of-birth exchange (00:30-00:43) represented a real
+interruption our event-based gap_ms would miss. Root question: gap_ms trusts
+response.done's timestamp for "when did our bot finish talking," but
+Twilio's `clear` (Issue 4) fires unconditionally on every speech_started
+regardless of response state -- so in theory a response the model considers
+fully "done" could still have its last word clipped audibly if the agent
+starts talking again before Twilio finishes playing out its buffer. gap_ms
+alone can't detect that gap between "model says done" and "phone line
+actually finished playing."
+**Fix (instrumentation, not a bug fix):** `bridge/realtime_client.py` --
+track the exact byte count of every `response.output_audio.delta` per
+response. G.711 (audio/pcmu) is a fixed-rate codec (8000 bytes/sec exactly),
+so `bytes / 8000` gives the *exact* audio duration, no word-count estimation
+needed. `last_gap_ms_audio` computes the gap the same way as `last_gap_ms`
+but measured from when the audio should actually finish playing (first-byte
+time + computed duration) instead of `response.done`'s timestamp.
+`bridge/server.py`/`bridge/transcript.py` -- both numbers now render
+side by side per turn (`gap: Xms, audio-check: Yms`), and the summary calls
+out any turn where they disagree by >300ms as "possible clipped audio."
+**Verified (synthetic offline test only):** confirmed the two methods
+diverge sharply in a simulated clipping scenario (+100ms event-based vs.
+-845ms audio-based) and agree closely in a normal one (1004ms vs. 1009ms).
+Not yet verified against a real call -- next run's transcript will show
+whether any real turns actually disagree by more than the threshold, which
+would be the first hard evidence of `clear` clipping legitimately-finished
+audio.

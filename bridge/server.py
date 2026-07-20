@@ -91,6 +91,7 @@ async def media_stream(websocket: WebSocket):
         # Captured on speech_started, consumed on the next AGENT transcript line.
         pending_gap_ms = None
         pending_gap_is_interrupt = False
+        pending_gap_ms_audio = None
 
         async def opening_watchdog():
             try:
@@ -111,7 +112,7 @@ async def media_stream(websocket: WebSocket):
                     break
 
         async def openai_to_twilio():
-            nonlocal pending_gap_ms, pending_gap_is_interrupt
+            nonlocal pending_gap_ms, pending_gap_is_interrupt, pending_gap_ms_audio
             async for event in realtime.events():
                 etype = event.get("type")
 
@@ -145,6 +146,7 @@ async def media_stream(websocket: WebSocket):
                     # was still in flight) from right now.
                     pending_gap_ms = realtime.last_gap_ms
                     pending_gap_is_interrupt = realtime.last_gap_is_interrupt
+                    pending_gap_ms_audio = realtime.last_gap_ms_audio
 
                 elif etype == "response.created":
                     # Gap timing is handled internally by RealtimeClient.
@@ -171,9 +173,11 @@ async def media_stream(websocket: WebSocket):
                         event.get("transcript", ""),
                         gap_ms=pending_gap_ms,
                         is_interrupt=pending_gap_is_interrupt,
+                        gap_ms_audio=pending_gap_ms_audio,
                     )
                     pending_gap_ms = None
                     pending_gap_is_interrupt = False
+                    pending_gap_ms_audio = None
 
                 elif etype == "error":
                     transcript.add_event_marker(f"OpenAI realtime error: {event.get('error')}")
