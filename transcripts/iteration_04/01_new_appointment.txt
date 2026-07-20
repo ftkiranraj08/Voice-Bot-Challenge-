@@ -1,0 +1,39 @@
+Scenario: Simple new appointment scheduling (01_new_appointment)
+Caller persona: Maria Chen
+Call SID: CA3c543cef5ea014396e3f9c01733fa005
+Started: 2026-07-20 00:05:22
+------------------------------------------------------------
+
+[00:00.00] SYSTEM: Call started (streamSid=MZ88dfaf2a6f4aca0d75d603dd33210393, callSid=CA3c543cef5ea014396e3f9c01733fa005)
+[00:04.70] AGENT: This call may be recorded for quality and training purposes.
+[00:07.42] AGENT: Para español, oprima el dos.
+[00:13.28] AGENT: Thanks for calling Pivot Point Orthopedics, part of Pretty Good AI. How may I help you today?
+[00:14.67] CALLER (bot): Hi, I’m calling to set up a new routine check-up with a doctor. I don’t have a specific day in mind, but sometime next week would work for me. Let me know what availability you have.
+[00:25.95] AGENT: (gap: 5863ms) I see you're calling from the number we have on file. Am I speaking with Maria?
+[00:26.68] CALLER (bot): Yes, this is Maria. That’s the number I’m calling from. I’d like to schedule a routine check-up sometime next week, if possible.
+[00:32.08] AGENT: (gap: 3147ms) Please provide your date of birth.
+[00:32.53] CALLER (bot): Sure, my date of birth is April 12, 1987.
+[00:36.72] AGENT: (gap: 1203ms) Could you please tell me your full date of birth?
+[00:37.07] CALLER (bot): Oh, of course. It’s April 12, 1987.
+[00:42.63] AGENT: (gap: 2782ms) Go ahead with your date of birth when you're ready
+[00:42.98] CALLER (bot): My date of birth is April 12, 1987.
+[01:00.79] AGENT: (gap: 7560ms) Thanks, Maria. You mentioned wanting a routine check-up with a doctor. Just to confirm, are you looking to book a general office visit for routine care?
+[01:01.07] CALLER (bot): Yes, that’s right. I’d like to book a general office visit for routine care sometime next week, if there’s availability.
+[01:09.83] AGENT: (gap: 3180ms) Do you have a specific doctor you'd like to see, or are you open to any available provider?
+[01:10.59] CALLER (bot): I’m open to seeing any available provider. As long as it’s a routine check-up, I’m happy to go with whoever is available next week.
+[01:21.74] AGENT: (gap: 4238ms) We have openings this week and early next week. Do you have a preferred day or time of day for your appointment?
+[01:22.81] CALLER (bot): I don’t have a particular day or time in mind. Next week is fine, and I’m flexible. If you have morning or early day slots, that could work, but I’m happy to take whatever is available.
+[01:48.26] AGENT: It looks like you already have a routine check-up appointment booked. If you'd like, I can help you reschedule or cancel that appointment.
+[01:51.88] AGENT: Would you like to make a change or do you want to speak with someone from our team?
+[01:52.95] CALLER (bot): Actually, that sounds good. If there’s already a routine check-up booked, I’d like to keep it as is. Thanks for offering, though. If anything changes on your end, just let me know.
+[02:07.49] AGENT: (gap: 6658ms) You're all set, Maria. Your routine checkup appointment remains as scheduled.
+[02:08.37] CALLER (bot): Perfect, thank you so much. That’s great to hear. I appreciate the help, and I’m all set. Have a good day, and I’ll talk to you again if I need anything else.
+[02:21.48] AGENT: (gap: 9655ms) Glad I could help, Maria.
+[02:21.80] CALLER (bot): Thank you again. You too, have a lovely day! Goodbye.
+[02:24.99] SYSTEM: Twilio sent stop event
+
+------------------------------------------------------------
+Turn-taking summary:
+  Turns measured: 9
+  Average gap: 4921ms
+  Flagged: 0 short gap(s), 0 mid-speech interrupt(s)
