@@ -1,0 +1,35 @@
+Scenario: Simple new appointment scheduling (01_new_appointment)
+Caller persona: Maria Chen
+Call SID: CAfd393472b05fe634a7d014e44a9867c4
+Started: 2026-07-19 02:25:15
+------------------------------------------------------------
+
+[00:00.00] SYSTEM: Call started (streamSid=MZaec7a61a35500522b1002b894a9f1c0e, callSid=CAfd393472b05fe634a7d014e44a9867c4)
+[00:04.40] AGENT: (gap: -56ms, MID-SPEECH INTERRUPT) This call may be recorded for quality and training purposes.
+[00:06.86] AGENT: (gap: -227ms, MID-SPEECH INTERRUPT) Para español, oprima el dos.
+[00:12.86] AGENT: Thanks for calling Pivot Point Orthopedics, part of Pretty Good AI. How may I help you today?
+[00:14.54] CALLER (bot): Hi there! I’m looking to schedule a routine check-up with a doctor. I’m pretty flexible and would be happy with sometime next week, if that’s possible. Can you help me find an available slot?
+[00:25.36] AGENT: (gap: 5986ms) I see you're calling from the number we have on file. Am I speaking with Maria?
+[00:27.48] CALLER (bot): Yes, that’s correct—let me confirm a couple details as we go.Yes, you’re speaking with Maria. Thanks for checking. I’d like to schedule a routine check-up sometime next week if possible. Could you help with available times, or tell me what options you have?
+[00:30.47] AGENT: (gap: 919ms) Please provide your date of birth.
+[00:31.68] CALLER (bot): Sure, my date of birth is March 14th, 1985. If you need any other information to set up the appointment, just let me know.
+[00:49.02] AGENT: (gap: 8162ms) Thanks, Maria. You'd like to schedule a routine check-up with a doctor? Just to confirm, is this for a general office visit for routine care?
+[00:50.38] CALLER (bot): Yes, that’s right. It would be a general office visit for routine care. I’m flexible with timing next week, so anything that works is fine. If you have a few openings, I’d be happy to take one.
+[00:59.02] AGENT: (gap: 3045ms) Do you have a specific doctor you'd like to see, or are you open to any available provider?
+[01:01.26] CALLER (bot): I’m actually open to seeing any available provider. A routine check-up is what I’m looking for, and if there’s a doctor with an open slot next week, that would be great. If you need me to share any extra details, like insurance information or anything else, I can provide that, but I’d prefer to just get a routine appointment scheduled for next week if possible.
+[01:11.62] AGENT: (gap: 3365ms) Let me check for the next available appointment for a routine checkup with any provider.
+[01:12.11] CALLER (bot): Sounds good, I appreciate you checking. I can wait on
+[01:21.46] AGENT: (gap: -904ms, MID-SPEECH INTERRUPT) It looks like you already have a routine check-up appointment booked. If you'd like, I can help you reschedule or cancel that appointment. What would you like to do?
+[01:23.15] CALLER (bot): Oh, that’s great to hear, thank you. I’d like to keep the routine check-up, actually. There’s no need to reschedule or cancel. I just wanted to make sure it was all set, and it sounds like it is. So, please keep it as is, and that’s perfect.
+[01:31.28] AGENT: (gap: 2748ms) You're welcome, Maria. If you need anything else, just let us know. Have a good night.
+[01:32.15] CALLER (bot): Thanks so much. I really appreciate your help scheduling everything. I’ll keep the appointment as it is. Have a wonderful night. Goodbye.
+[01:34.98] SYSTEM: Twilio sent stop event
+
+------------------------------------------------------------
+Turn-taking summary:
+  Turns measured: 9
+  Average gap: 2560ms
+  Flagged: 0 short gap(s), 3 mid-speech interrupt(s)
+    [00:04.40] gap=-56ms MID-SPEECH INTERRUPT
+    [00:06.86] gap=-227ms MID-SPEECH INTERRUPT
+    [01:21.46] gap=-904ms MID-SPEECH INTERRUPT
