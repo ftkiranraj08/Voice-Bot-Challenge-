@@ -95,6 +95,19 @@ class RealtimeClient:
         """Ask the bot to speak first (used when it should open the call)."""
         await self._send({"type": "response.create"})
 
+    async def cancel_response(self):
+        """Stop the model from continuing to generate the in-flight response.
+
+        Barge-in must do this in addition to flushing Twilio's playback
+        buffer -- otherwise the model keeps composing (and we keep hearing
+        about, via transcript deltas) a response that was already cut off on
+        the audio side, so the transcript and the actual call diverge and
+        the "response in progress" state never clears for gap tracking.
+        No-op if nothing is currently in flight.
+        """
+        if self._response_in_progress:
+            await self._send({"type": "response.cancel"})
+
     def _track_turn_gap(self, event):
         etype = event.get("type")
         if etype == "response.created":

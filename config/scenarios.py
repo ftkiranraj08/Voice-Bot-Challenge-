@@ -14,6 +14,10 @@ Fields:
   opening_line  optional: what the caller says first, if the bot should speak
                 first instead of waiting for the agent to greet. Leave None
                 to let the agent open (typical for an inbound IVR/agent).
+  language      optional: language the caller commits to and holds for the
+                whole call, regardless of what the agent responds in. Defaults
+                to "English" if omitted -- only set this when the scenario is
+                specifically testing a language switch.
   probe         what bug/behavior this scenario is specifically testing for --
                 used only for the bug-report writeup, not sent to the model
   max_duration_sec  hard cap enforced both via Twilio's time_limit and a

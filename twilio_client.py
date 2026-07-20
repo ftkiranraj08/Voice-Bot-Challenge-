@@ -43,12 +43,22 @@ def wait_for_completion(client, call_sid, poll_interval_sec=5, overall_timeout_s
     return "timeout"
 
 
-def wait_for_recording(client, call_sid, poll_interval_sec=3, timeout_sec=60):
+RECORDING_FAILURE_STATUSES = {"failed", "absent"}
+
+
+def wait_for_recording(client, call_sid, poll_interval_sec=3, timeout_sec=90):
+    # Twilio lists the recording resource (status "processing") right after
+    # the call ends, well before the .mp3 is actually fetchable -- downloading
+    # then 404s. Wait for status "completed" specifically.
     deadline = time.monotonic() + timeout_sec
     while time.monotonic() < deadline:
         recordings = client.recordings.list(call_sid=call_sid, limit=1)
         if recordings:
-            return recordings[0]
+            recording = recordings[0]
+            if recording.status == "completed":
+                return recording
+            if recording.status in RECORDING_FAILURE_STATUSES:
+                return None
         time.sleep(poll_interval_sec)
     return None
 

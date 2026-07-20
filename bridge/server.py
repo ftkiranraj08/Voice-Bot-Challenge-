@@ -35,6 +35,12 @@ METADATA_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__fi
 # caller bot to speak first rather than sitting in silence for the whole call.
 OPENING_GRACE_SEC = 5.0
 
+# After Twilio ends the media stream, give the OpenAI side this long to finish
+# delivering any trailing events already in flight (e.g. a transcription for
+# the agent's last utterance) before tearing the connection down, so the end
+# of the call doesn't get silently dropped from the transcript.
+TRAILING_EVENTS_GRACE_SEC = 2.5
+
 
 @app.api_route("/twiml", methods=["GET", "POST"])
 async def twiml(request: Request):
@@ -123,10 +129,16 @@ async def media_stream(websocket: WebSocket):
                 elif etype == "input_audio_buffer.speech_started":
                     # Barge-in: the healthcare agent started talking. Flush
                     # whatever of our bot's audio Twilio still has queued so
-                    # it stops immediately instead of talking over them.
+                    # it stops immediately instead of talking over them, AND
+                    # tell the model itself to stop generating that response
+                    # -- flushing Twilio alone leaves the model composing (and
+                    # us transcribing) a turn that was already cut off on the
+                    # audio side, so the transcript stops matching what was
+                    # actually said and "response in progress" never clears.
                     await websocket.send_text(
                         json.dumps({"event": "clear", "streamSid": stream_sid})
                     )
+                    await realtime.cancel_response()
                     # Same signal is the agent's response-latency endpoint --
                     # RealtimeClient already computed the gap (negative if
                     # this is a true mid-speech interrupt, i.e. our response
@@ -179,6 +191,14 @@ async def media_stream(websocket: WebSocket):
             )
             if not done:
                 transcript.add_event_marker(f"Hit max_duration_sec watchdog ({scenario['max_duration_sec']}s)")
+            elif twilio_task in done and openai_task in pending:
+                # Twilio ended the stream cleanly -- give OpenAI's trailing
+                # events a brief window to arrive instead of cutting them off.
+                trailing_done, trailing_pending = await asyncio.wait(
+                    {openai_task}, timeout=TRAILING_EVENTS_GRACE_SEC
+                )
+                done |= trailing_done
+                pending = trailing_pending
             for task in pending:
                 task.cancel()
             for task in pending:
