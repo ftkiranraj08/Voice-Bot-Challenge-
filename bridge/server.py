@@ -146,10 +146,30 @@ async def media_stream(websocket: WebSocket):
                     pending_gap_ms = realtime.last_gap_ms
                     pending_gap_is_interrupt = realtime.last_gap_is_interrupt
 
-                elif etype in ("response.created", "response.done"):
-                    # response.done marks "our turn ended" for gap timing
-                    # (handled internally by RealtimeClient); nothing to do here.
-                    pass
+                elif etype == "response.created":
+                    # Gap timing itself is handled internally by RealtimeClient.
+                    # Temporary diagnostic: helps confirm whether spurious/
+                    # near-empty responses are opening early in the call
+                    # (e.g. before the agent's real greeting), which is the
+                    # suspected cause of false MID-SPEECH INTERRUPT flags at
+                    # call start -- remove once that's confirmed/resolved.
+                    print(f"[debug] response.created elapsed={transcript._elapsed():.2f}s id={event.get('response', {}).get('id')}")
+
+                elif etype == "response.done":
+                    resp = event.get("response", {})
+                    output = resp.get("output", [])
+                    print(
+                        f"[debug] response.done elapsed={transcript._elapsed():.2f}s "
+                        f"id={resp.get('id')} status={resp.get('status')} output_items={len(output)}"
+                    )
+                    # Safety net: normally response.output_audio_transcript.done
+                    # flushes whatever the caller-bot said. If a response gets
+                    # cancelled mid-generation, that event may never fire for
+                    # it -- without this, any partial sentence our bot actually
+                    # spoke before being cut off would silently vanish from the
+                    # transcript instead of showing up truncated. flush() is a
+                    # no-op if there's nothing pending.
+                    transcript.flush("caller_bot")
 
                 elif etype == "response.output_audio_transcript.delta":
                     transcript.append_delta("caller_bot", event.get("delta", ""))

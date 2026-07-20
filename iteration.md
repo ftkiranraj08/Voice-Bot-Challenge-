@@ -84,3 +84,70 @@ nothing needs cancelling. `bridge/server.py` -- added a ~2.5s grace window
 OpenAI-listening task, so trailing events already in flight can still be 
 captured.
 **Verified:** [pending re-run / call XX]
+
+---
+
+## Issue 5: response.cancel fix exposed a pre-existing false-trigger problem (regression vs. iteration 1/2)
+**Found in:** Call 01, 3rd run (CAa53e8d9d4e063b1a0fc64bc96647277a), comparing 
+against the 1st and 2nd runs -- audio noticeably worse, caller-bot barely 
+got to speak, and new `OpenAI realtime error: response_cancel_not_active 
+... no active response found` entries appeared repeatedly in the transcript, 
+including right after the agent's very first two lines (00:04.73, 00:07.24) 
+-- before the caller-bot had said a single word.
+**Root cause:** `response.cancel` (Issue 4's fix) made barge-in genuinely 
+end the model's response, whereas before it was a client-side-only, mostly 
+cosmetic flush. That surfaced a pre-existing issue: our Realtime session 
+opens a `response.created` very early in the call -- before the agent's 
+real greeting -- that never produces audio (near-instant/empty). Before 
+Issue 4's fix this was harmless (nothing to actually cut off); after it, 
+every one of these phantom responses gets flagged as a false MID-SPEECH 
+INTERRUPT and triggers a `response.cancel` against a response that's often 
+already ended server-side, producing the `response_cancel_not_active` 
+errors. Root trigger for the phantom response itself is still unconfirmed 
+(candidates: our own opening-watchdog firing before real audio is flowing, 
+or the model's server-VAD reacting to a brief non-speech blip at call 
+connect) -- temporary debug logging added to pin this down on the next run.
+**Fix (partial):** `bridge/realtime_client.py` -- gate both interrupt 
+detection and `cancel_response()` on the response having actually produced 
+an audio delta (`_response_has_audio`), not just on `response.created` 
+having fired. A response with no audio yet has nothing audible to 
+interrupt, so it's no longer flagged or cancelled. `bridge/server.py` -- 
+added temporary `[debug]` print logging for `response.created`/
+`response.done` (elapsed time, id, status, output item count) to capture 
+the phantom response's timing on the next call, to decide whether the 
+root cause needs a separate fix (e.g. tuning VAD threshold, or not treating 
+Twilio's earliest media frames as "audio heard" for the opening-watchdog).
+**Verified:** [pending re-run / call XX -- also need one more run with 
+debug logging to confirm/rule out the opening-watchdog theory]
+
+---
+
+## Issue 6: caller-bot transcript could silently drop a cancelled turn's partial speech
+**Found in:** Design review while answering "should the transcript show only 
+what the caller-bot actually spoke, or whatever text the model generated" -- 
+not something observed directly in a call yet.
+**Root cause:** The transcript only ever flushed the caller-bot's pending 
+text on `response.output_audio_transcript.done`. That event normally fires 
+when a response finishes normally, but it's not guaranteed to fire the same 
+way for a response that got cut off mid-generation by `response.cancel` 
+(Issue 4/5). If it doesn't fire, whatever partial sentence the bot had 
+already composed -- and very likely already started speaking, since audio 
+and its transcript are generated together -- would just vanish from the 
+transcript with no trace, understating what was actually said rather than 
+overstating it (the opposite failure mode from Issue 4).
+**Fix:** `bridge/server.py` -- also flush the caller-bot's pending text on 
+`response.done` (which reliably fires for every response, cancelled or not), 
+as a safety net on top of the existing `response.output_audio_transcript.
+done` flush. `flush()` is a no-op if there's nothing pending, so this only 
+matters for the cancelled-mid-sentence case.
+**Design intent (answering the question directly):** the transcript should 
+reflect what the caller-bot actually said, not everything the model 
+internally generated. In practice these are almost the same thing, since 
+Realtime API composes audio and its transcript together turn by turn -- the 
+only place they can diverge is a cancelled/interrupted turn, where a few 
+hundred ms of already-buffered-but-unplayed audio might get flushed by 
+Twilio's `clear` after the model already committed to generating text for 
+it. That's a small, structural gap in a live-audio system, not something 
+worth engineering around further right now.
+**Verified:** [pending re-run / call XX with a genuine mid-speech interrupt 
+to confirm the cancelled turn's partial line still appears]

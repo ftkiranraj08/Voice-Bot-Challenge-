@@ -41,6 +41,7 @@ class RealtimeClient:
         # response started instead, which comes out negative.
         self._response_started_at = None
         self._response_in_progress = False
+        self._response_has_audio = False
         self._bot_stopped_at = None
         self._gap_captured_for_turn = True
         self.last_gap_ms = None
@@ -103,9 +104,15 @@ class RealtimeClient:
         about, via transcript deltas) a response that was already cut off on
         the audio side, so the transcript and the actual call diverge and
         the "response in progress" state never clears for gap tracking.
-        No-op if nothing is currently in flight.
+
+        Gated on the response actually having produced audio: a response
+        that's been created but hasn't emitted a single audio delta yet has
+        nothing audible to interrupt. Cancelling it anyway both mislabels a
+        non-event as a barge-in and frequently races the server naturally
+        finishing that (often near-empty) response first, surfacing as a
+        benign but noisy "no active response found" error.
         """
-        if self._response_in_progress:
+        if self._response_in_progress and self._response_has_audio:
             await self._send({"type": "response.cancel"})
 
     def _track_turn_gap(self, event):
@@ -116,20 +123,27 @@ class RealtimeClient:
             # normal post-completion gap.
             self._response_started_at = time.monotonic()
             self._response_in_progress = True
+            self._response_has_audio = False
             self._gap_captured_for_turn = False
+        elif etype == "response.output_audio.delta":
+            self._response_has_audio = True
         elif etype == "response.done":
             self._bot_stopped_at = time.monotonic()
             self._response_in_progress = False
         elif etype == "input_audio_buffer.speech_started" and not self._gap_captured_for_turn:
             self._gap_captured_for_turn = True
             now = time.monotonic()
-            if self._response_in_progress and self._response_started_at is not None:
+            if self._response_in_progress and self._response_started_at is not None and self._response_has_audio:
+                # Real mid-speech interrupt: our bot was audibly talking.
                 self.last_gap_ms = round((self._response_started_at - now) * 1000)
                 self.last_gap_is_interrupt = True
-            elif self._bot_stopped_at is not None:
+            elif not self._response_in_progress and self._bot_stopped_at is not None:
                 self.last_gap_ms = round((now - self._bot_stopped_at) * 1000)
                 self.last_gap_is_interrupt = False
             else:
+                # Either nothing to measure yet, or a response is in flight
+                # but hasn't produced audio -- not a real interrupt, and
+                # using a stale bot_stopped_at here would misattribute the gap.
                 self.last_gap_ms = None
                 self.last_gap_is_interrupt = False
 
