@@ -1,0 +1,29 @@
+Scenario: Office hours question (06_office_hours)
+Caller persona: Maria Chen
+Call SID: CA0166292164142e4c1dfd2ba101453727
+Started: 2026-07-20 17:32:31
+------------------------------------------------------------
+
+[00:00.00] SYSTEM: Call started (streamSid=MZfb8ce0179e5d3109c033b048d64d10b6, callSid=CA0166292164142e4c1dfd2ba101453727)
+[00:04.23] AGENT: This call may be recorded for quality and training purposes.
+[00:12.65] AGENT: Para español, oprima el dos.
+[00:14.19] CALLER (bot): Hi, I’m Maria Chen. I just want to know what your office hours are, including whether you’re open on weekends. And if possible, could you be specific about the weekday hours, like what time you open and close? Thanks!
+[00:19.94] AGENT: (gap: -8933ms, MID-SPEECH INTERRUPT) Please provide your date of birth.
+[00:20.14] CALLER (bot): July 4th, 2000.
+[00:27.34] AGENT: How can I assist you today?
+[00:32.73] AGENT: Are you calling about an appointment, medication, insurance, or something else?
+[00:34.44] CALLER (bot): Something else, actually. I’m calling to find out what your office hours are, and whether you’re open on weekends. If you can, give me the specific times you open and close on weekdays, not just that you’re open Monday through Friday. That’ll help me plan better.
+[01:03.63] AGENT: (gap: 2766ms) We're open Monday, Tuesday and Thursday from 9am to 4pm, Wednesday from 12pm to 7pm, and Friday from 9am to 12pm. We're closed on weekends. Let me know if you need anything else.
+[01:06.33] CALLER (bot): That’s perfect, thanks for laying that out. So Monday, Tuesday, and Thursday are 9 to 4, Wednesday is noon to 7, and Friday is 9 to 12. And you’re closed on weekends. Got it. I really appreciate the clear schedule. Thanks a lot!
+[01:28.50] AGENT: (gap: 718ms) You've got it exactly right. If you need to book an appointment or have any other questions, just let me know.
+[01:29.08] CALLER (bot): Perfect, thanks again. That answers what I needed. Have a great day, and I’ll get out of your way now. Goodbye!
+[01:42.06] AGENT: (gap: 3333ms) Glad I could help. Have a great day. Goodbye.
+[01:42.51] CALLER (bot): Thanks so much. I really appreciate your help today. Take care, and goodbye!
+[02:00.85] SYSTEM: Hit max_duration_sec watchdog (120s)
+
+------------------------------------------------------------
+Turn-taking summary:
+  Turns measured: 4
+  Average gap: -529ms
+  Flagged: 0 short gap(s), 1 mid-speech interrupt(s)
+    [00:19.94] gap=-8933ms MID-SPEECH INTERRUPT

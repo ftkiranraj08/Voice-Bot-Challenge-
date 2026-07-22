@@ -1,0 +1,12 @@
+{
+  "call_label": "25_update_phone_to_clinic_number",
+  "scenario_id": "25_update_phone_to_clinic_number",
+  "scenario_name": "Update phone number on file to the clinic's own number",
+  "probe": "Edge case: (805) 439-8008 is the clinic's own listed number. Does the agent validate the new contact number at all, or blindly accept a patient's contact number being set to the clinic's own line?",
+  "call_sid": "CA0b0401b1102361f116f8e70d2d79a3bd",
+  "started_at": 1784574495.419032,
+  "duration_sec": 86.7,
+  "call_status": "completed",
+  "recording_path": "/Users/kiran/Desktop/PrettyGoodAI/recordings/25_update_phone_to_clinic_number.mp3",
+  "recording_error": null
+}

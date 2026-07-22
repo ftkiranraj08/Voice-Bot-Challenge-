@@ -1,0 +1,40 @@
+Scenario: Update phone number on file (24_update_phone_number)
+Caller persona: Maria Chen
+Call SID: CA65d8c6bd84c6c17eb2017b6c1e9a84e5
+Started: 2026-07-20 14:22:07
+------------------------------------------------------------
+
+[00:00.00] SYSTEM: Call started (streamSid=MZ4c1c368779254d7cded1608a3f78d13a, callSid=CA65d8c6bd84c6c17eb2017b6c1e9a84e5)
+[00:04.93] AGENT: This call may be recorded for quality and training purposes.
+[00:07.26] CALLER (bot): Yes, this is Maria
+[00:07.41] AGENT: (gap: -730ms, MID-SPEECH INTERRUPT) Para español, oprima el dos.
+[00:13.58] AGENT: Thanks for calling Pivot Point Orthopedics, part of PrettyGoodAI. How may I help you today?
+[00:16.70] CALLER (bot): Thanks for the introduction. Let me briefly explain what I need.Hi, this is Maria Chen. I just got a new phone and need to update the phone number you have on file for me. My current number on file is two one three, two three eight, six five six seven, and I’d like to change it to two one three, five five five, zero one four two. That’s all I need updated.
+[00:30.88] AGENT: (gap: -11492ms, MID-SPEECH INTERRUPT) Please provide your date of birth.
+[00:31.16] CALLER (bot): My date of birth is July 4th, 2000.
+[00:39.11] AGENT: Thanks Maria.
+[00:40.88] AGENT: What is your new phone number?
+[00:41.43] CALLER (bot): My new phone number is two one three, five five five, zero one four two.
+[00:54.96] AGENT: I have your new phone number as 213-555-0142?
+[00:56.45] AGENT: Is that correct?
+[00:56.95] CALLER (bot): Yes, that’s correct. It should be two one three, five five five, zero one four two. Thank you!
+[01:04.68] AGENT: (gap: -2971ms, MID-SPEECH INTERRUPT) One moment while I update your phone number in our system.
+[01:05.12] CALLER (bot): Okay, sounds good. Thanks for taking care of that. Let me know when you’re finished or if you need anything else from me.
+[01:17.22] AGENT: Your request to update your phone number is being processed.
+[01:19.34] AGENT: I'll let you know as soon as it's complete.
+[01:19.89] CALLER (bot): Thank you, I appreciate it. Just let me know when it’s done. I’ll be waiting.
+[01:35.19] AGENT: Your request to update your phone number has been submitted. The clinic support team will update it and contact you if they need anything else.
+[01:37.25] AGENT: Is there anything else I can help you with today?
+[01:38.00] CALLER (bot): No, that’s it, thank you. I already gave you the number change, so I’m all set. I really appreciate the help. Thanks, and goodbye.
+[01:53.51] AGENT: (gap: 2599ms) You're all set, Maria. Have a great day. Goodbye.
+[01:53.84] CALLER (bot): Thanks so much. I really appreciate it. You have a great day too. Goodbye!
+[01:57.05] SYSTEM: Twilio sent stop event
+
+------------------------------------------------------------
+Turn-taking summary:
+  Turns measured: 4
+  Average gap: -3148ms
+  Flagged: 0 short gap(s), 3 mid-speech interrupt(s)
+    [00:07.41] gap=-730ms MID-SPEECH INTERRUPT
+    [00:30.88] gap=-11492ms MID-SPEECH INTERRUPT
+    [01:04.68] gap=-2971ms MID-SPEECH INTERRUPT

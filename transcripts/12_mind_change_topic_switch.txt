@@ -1,0 +1,45 @@
+Scenario: Caller changes their mind mid-call / topic switch (12_mind_change_topic_switch)
+Caller persona: Maria Chen
+Call SID: CAe305b326e784cb771ddc1d2a380731ab
+Started: 2026-07-20 17:13:58
+------------------------------------------------------------
+
+[00:00.00] SYSTEM: Call started (streamSid=MZ3a5406c1749faeeafa790089dbbf054a, callSid=CAe305b326e784cb771ddc1d2a380731ab)
+[00:04.81] AGENT: This call may be recorded for quality and training purposes.
+[00:07.43] AGENT: Para español, oprima el dos.
+[00:10.24] AGENT: Thanks for calling Pivot Point Orthopedics.
+[00:13.91] AGENT: Part of Pretty Good AI. How may I help you today?
+[00:17.12] CALLER (bot): Hi, this is Maria Chen. I was hoping to schedule a new appointment, if that’s possible. But—actually, before we get started, I realized I might just want to ask about office hours instead. However, I think I’d still like to book the appointment, if we can, for, well, I’m not totally sure—maybe something simple, like a routine follow-up. Could you tell me what times you have available?
+[00:37.37] AGENT: (gap: -4813ms, MID-SPEECH INTERRUPT) Please provide your date of birth.
+[00:37.71] CALLER (bot): My date of birth is July 4, 2000.
+[00:51.40] AGENT: (gap: 3949ms) Are you a new patient to the clinic or have you visited us before? This will help me book the right type of appointment for you.
+[00:53.42] CALLER (bot): I’ve actually visited you before. I’m not completely new, but I’m not sure this is considered a follow-up or something else—I was just trying to get a routine appointment. If you need any other details, like my phone number, I can give those, but I’m not sure yet what kind of visit it should be.
+[01:03.65] AGENT: (gap: -12418ms, MID-SPEECH INTERRUPT) Is this appointment for a follow-up to a previous visit, or is it for a new concern or routine check-up?
+[01:05.32] CALLER (bot): It’s mostly a follow-up to a previous visit, but I’m also open to it being a routine check-up. I was thinking it might be a follow-up, but I do want to be sure it’s booked correctly. If you can help figure out which category fits best, that’d be great.
+[01:15.34] AGENT: (gap: -10109ms, MID-SPEECH INTERRUPT) Just to confirm, you'd like to schedule a follow-up consultation for your next appointment. Is that correct?
+[01:17.54] CALLER (bot): Yes, that’s right. I’d like to schedule a follow-up consultation for my next appointment. That’s what I had in mind. If there’s any question about what was said earlier, I’m happy to clarify, and I’m still a bit unsure about whether it’s purely a follow-up or also a check-up. But yes, follow-up consultation is correct.
+[01:26.30] AGENT: (gap: -13800ms, MID-SPEECH INTERRUPT) Do you have a specific provider you'd like to see, or are you open to any available provider?
+[01:28.02] CALLER (bot): Well, I’m actually not sure. I’ve seen different providers before, so if there’s someone available that you’d recommend, I’d be open to that. I don’t have a strong preference for any one provider, so whichever works best for your schedule is fine with me. Just let me know what’s available.
+[01:50.89] AGENT: Let me check for the next available follow-up consultation appointment. One moment.
+[02:00.54] AGENT: We have several openings for follow-up consultations this week. Do you have a preferred time of day, like morning or afternoon, or would you like to hear the earliest available slot?
+[02:06.86] AGENT: We have several openings for follow-up consultations this week. Are you looking for a morning or afternoon appointment?
+[02:08.12] CALLER (bot): I actually don’t have a strong preference. I’m okay with either morning or afternoon. But if there’s an earliest available slot, that’s fine too. Maybe mid-morning if I had to pick, but I’m flexible.
+[02:21.52] AGENT: (gap: -7331ms, MID-SPEECH INTERRUPT) The earliest available slot is Tuesday, July 21st at 8:00 AM with Dr. Doogie Howser. Would you like to book that time?
+[02:23.52] CALLER (bot): Yes, that time works for me. I’d like to book the earliest available slot on Tuesday, July 21 at 8 AM with Dr. Doogie Houser for the follow-up consultation. That sounds good.
+[02:56.58] AGENT: (gap: 2478ms) Your follow-up appointment is set for Tuesday, July 21 at 8 AM with Dr. Doogie Howser at Pivot Point Orthopedics. Please bring your photo ID, insurance card, a list of current medications, and any imaging discs if you have them. Would you like a text message with your appointment details?
+[02:59.11] CALLER (bot): Yes, please send a text message with the appointment details. I’ll be sure to bring my photo ID, insurance card, list of medications, and any imaging discs I have. And you can use the phone number you have on file—(213) 238-6567. Thanks again!
+[03:22.40] AGENT: (gap: -6344ms, MID-SPEECH INTERRUPT) You're all set. Your appointment details have been sent to your phone number ending in 6567. If you need anything else, just let me know.
+[03:23.40] CALLER (bot): Perfect, thank you. I got the confirmation and will keep that handy. I appreciate the help, and I’ll see you next Tuesday. Goodbye!
+[03:30.31] SYSTEM: Hit max_duration_sec watchdog (210s)
+
+------------------------------------------------------------
+Turn-taking summary:
+  Turns measured: 8
+  Average gap: -6048ms
+  Flagged: 0 short gap(s), 6 mid-speech interrupt(s)
+    [00:37.37] gap=-4813ms MID-SPEECH INTERRUPT
+    [01:03.65] gap=-12418ms MID-SPEECH INTERRUPT
+    [01:15.34] gap=-10109ms MID-SPEECH INTERRUPT
+    [01:26.30] gap=-13800ms MID-SPEECH INTERRUPT
+    [02:21.52] gap=-7331ms MID-SPEECH INTERRUPT
+    [03:22.40] gap=-6344ms MID-SPEECH INTERRUPT

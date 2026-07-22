@@ -1,0 +1,31 @@
+Scenario: Cancel an appointment (03_cancel_appointment)
+Caller persona: Maria Chen
+Call SID: CA9c3e44f4cda233e4099840e7004596fa
+Started: 2026-07-21 10:53:54
+------------------------------------------------------------
+
+[00:00.00] SYSTEM: Call started (streamSid=MZ3edda605971349899a2d9414a096b945, callSid=CA9c3e44f4cda233e4099840e7004596fa)
+[00:04.75] AGENT: This call may be recorded for quality and training purposes.
+[00:07.26] AGENT: Para español, oprima el dos.
+[00:13.54] AGENT: Thanks for calling Pivot Point Orthopedics, part of Pretty Good AI. How may I help you today?
+[00:15.21] CALLER (bot): Hi, this is Maria Chen. I need to cancel my upcoming appointment. I don’t want to reschedule right now, so please just cancel it. If you need any details like my date of birth or phone number, I can provide those. Thank you.
+[00:27.25] AGENT: (gap: -2484ms, MID-SPEECH INTERRUPT) Please provide your date of birth.
+[00:27.64] CALLER (bot): July 4, 2000.
+[00:46.83] AGENT: (gap: 6326ms) You have three appointments today, one with Abe Ricker, one with Doogie Howser, and one with Zbigniew Lukosky. Which appointment would you like to cancel?
+[00:47.94] CALLER (bot): I’d like to cancel my upcoming appointment entirely. I don’t want to reschedule right now, just cancel it. I’m sorry for any inconvenience, but please take care of that.
+[01:12.03] AGENT: (gap: 2857ms) No problem. To confirm, you want to cancel all three appointments today with Abercrombie Doogie Howser and Zbigniew Lukoski.
+[01:13.56] CALLER (bot): Yes, that’s correct. Please go ahead and cancel those three appointments today. I appreciate you taking care of that.
+[01:31.92] AGENT: (gap: 2980ms) Can you share a brief reason for canceling your appointment? If you prefer not to say, I can just note it as "patient requested cancellation".
+[01:32.51] CALLER (bot): You can just note it as “patient requested cancellation.” I don’t want to share more than that. Thank you.
+[02:02.39] AGENT: (gap: 21828ms) Are you still there?
+[02:02.85] CALLER (bot): Yes, I’m still here. Thank you for asking.
+[02:26.54] AGENT: (gap: 13998ms) All three of your appointments today have been canceled as you requested. Is there anything else I can help you with?
+[02:27.19] CALLER (bot): No, that’s all for me. Thank you for canceling them, I really appreciate it. You’ve been very helpful. Goodbye.
+[02:31.23] SYSTEM: Hit max_duration_sec watchdog (150s)
+
+------------------------------------------------------------
+Turn-taking summary:
+  Turns measured: 6
+  Average gap: 7584ms
+  Flagged: 0 short gap(s), 1 mid-speech interrupt(s)
+    [00:27.25] gap=-2484ms MID-SPEECH INTERRUPT

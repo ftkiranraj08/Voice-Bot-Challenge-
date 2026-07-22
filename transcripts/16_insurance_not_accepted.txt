@@ -1,0 +1,46 @@
+Scenario: Insurance not accepted (16_insurance_not_accepted)
+Caller persona: Maria Chen
+Call SID: CA97b8234db79fd26afff73529d484d124
+Started: 2026-07-20 16:29:41
+------------------------------------------------------------
+
+[00:00.00] SYSTEM: Call started (streamSid=MZcfec7e6cf26e4f95ab61f52320781f4e, callSid=CA97b8234db79fd26afff73529d484d124)
+[00:04.52] AGENT: This call may be recorded for quality and training purposes.
+[00:07.29] AGENT: Para español, oprima el dos.
+[00:13.44] AGENT: Thanks for calling Pivot Point Orthopedics, part of Pretty Good AI. How may I help you today?
+[00:14.74] CALLER (bot): Hi, I’m Maria Chen. I’d like to schedule a routine appointment, please. I’m calling to book it and get it set up.
+[00:25.63] AGENT: (gap: 326ms) Maria, can you please provide your date of birth?
+[00:26.46] CALLER (bot): Sure, let me go ahead and share that with you now.My date of birth is July 4th, 2000.
+[00:31.88] AGENT: (gap: -5538ms, MID-SPEECH INTERRUPT) Hi, Ms. Senior Calling Maria. Could you please tell me your date of birth?
+[00:32.38] CALLER (bot): Yes, speaking. My date of birth is July 4th, 2000.
+[00:37.70] AGENT: (gap: -2118ms, MID-SPEECH INTERRUPT) Please tell me your date of birth.
+[00:38.08] CALLER (bot): My date of birth is July 4th, 2000.
+[00:55.43] AGENT: (gap: 4375ms) You mentioned wanting a routine appointment. Just to confirm, is this for a general office visit, or is there a specific concern you'd like to discuss?
+[00:56.81] CALLER (bot): Yes, this is just a routine general office visit—no specific concern I need to address right now. I want to schedule it as a routine appointment.
+[01:05.06] AGENT: (gap: -5177ms, MID-SPEECH INTERRUPT) Do you have a preferred provider for your appointment, or would you like to see the first available?
+[01:06.66] CALLER (bot): I’d prefer to see the first available provider, unless there’s someone you’d suggest for a routine visit. I’m flexible and just want to get something scheduled.
+[01:19.48] AGENT: (gap: -738ms, MID-SPEECH INTERRUPT) Let me check the soonest available appointments for a routine office visit.
+[01:20.06] CALLER (bot): Okay, thanks. I appreciate you checking.
+[01:21.72] AGENT: (gap: -2288ms, MID-SPEECH INTERRUPT) It looks like you
+[01:22.43] CALLER (bot): Okay, I was waiting for the update. Please go ahead—let me know what you find for the first available routine visit.
+[01:34.42] AGENT: It appears you already have a routine office visit scheduled. If you'd like, I can help you reschedule or cancel that appointment, or I can connect you to a team member for further assistance.
+[01:35.56] AGENT: What would you like to do?
+[01:38.24] CALLER (bot): I’d actually like to keep it if it’s already scheduled, if that’s fine. But I don’t have the details yet—what’s the date and time? If it doesn’t work, I can reschedule or cancel. If it’s already set up and I just need to adjust something, I can also talk to a team member.
+[01:46.62] AGENT: You're all set then, your routine appointment is already on the books.
+[01:50.39] AGENT: If you need to make any changes or have other questions, just let me know.
+[01:51.11] CALLER (bot): Great, thanks for confirming. I’ll keep the appointment as it is. I really appreciate your help. Goodbye.
+[01:57.90] AGENT: (gap: -1987ms, MID-SPEECH INTERRUPT) You're welcome. Have a great day, Maria.
+[01:58.35] CALLER (bot): Thank you! You too—have a great day. Goodbye.
+[03:00.33] SYSTEM: Hit max_duration_sec watchdog (180s)
+
+------------------------------------------------------------
+Turn-taking summary:
+  Turns measured: 8
+  Average gap: -1643ms
+  Flagged: 0 short gap(s), 6 mid-speech interrupt(s)
+    [00:31.88] gap=-5538ms MID-SPEECH INTERRUPT
+    [00:37.70] gap=-2118ms MID-SPEECH INTERRUPT
+    [01:05.06] gap=-5177ms MID-SPEECH INTERRUPT
+    [01:19.48] gap=-738ms MID-SPEECH INTERRUPT
+    [01:21.72] gap=-2288ms MID-SPEECH INTERRUPT
+    [01:57.90] gap=-1987ms MID-SPEECH INTERRUPT

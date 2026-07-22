@@ -1,0 +1,12 @@
+{
+  "call_label": "26_wrong_service_for_doctor",
+  "scenario_id": "26_wrong_service_for_doctor",
+  "scenario_name": "Ask for services/doctor list, then book a mismatched service",
+  "probe": "Does the agent catch the service/specialty mismatch and redirect appropriately (e.g. explain this is an orthopedic clinic and point toward the right kind of provider), or does it just book the mismatched appointment anyway?",
+  "call_sid": "CA40607a31e39c99a5e18b35cdb4def3d7",
+  "started_at": 1784577427.1839628,
+  "duration_sec": 152.2,
+  "call_status": "completed",
+  "recording_path": "/Users/kiran/Desktop/PrettyGoodAI/recordings/26_wrong_service_for_doctor.mp3",
+  "recording_error": null
+}

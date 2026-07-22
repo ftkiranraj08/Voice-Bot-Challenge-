@@ -1,0 +1,12 @@
+{
+  "call_label": "call-15_15_hard_of_hearing_repeat",
+  "scenario_id": "15_hard_of_hearing_repeat",
+  "scenario_name": "Hard-of-hearing caller needing repeats",
+  "probe": "Does the agent stay patient, re-confirm details clearly, and avoid compounding the mishearing?",
+  "call_sid": "CA739158b3047ec372f31f6154dac735ee",
+  "started_at": 1784568394.309878,
+  "duration_sec": 184.3,
+  "call_status": "completed",
+  "recording_path": "/Users/kiran/Desktop/PrettyGoodAI/recordings/call-15_15_hard_of_hearing_repeat.mp3",
+  "recording_error": null
+}

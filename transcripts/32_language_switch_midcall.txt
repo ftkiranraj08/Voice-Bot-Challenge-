@@ -1,0 +1,46 @@
+Scenario: Switch from English to Spanish halfway through the call (32_language_switch_midcall)
+Caller persona: Maria Chen
+Call SID: CA258b15f16c8190ef3f6a39706587a598
+Started: 2026-07-20 17:39:09
+------------------------------------------------------------
+
+[00:00.00] SYSTEM: Call started (streamSid=MZ29bac0ed7a4b14786d9e1fe5a4b6cb23, callSid=CA258b15f16c8190ef3f6a39706587a598)
+[00:04.60] AGENT: This call may be recorded for quality and training purposes.
+[00:07.17] AGENT: Para español, oprima el dos.
+[00:13.45] AGENT: Thanks for calling Pivot Point Orthopedics, part of Pretty Good AI. How may I help you today?
+[00:13.99] CALLER (bot): Hi, I’m calling to schedule a routine check-up appointment. I’d like to set up something normal, just a regular visit with my doctor.
+[00:25.15] AGENT: (gap: -1574ms, MID-SPEECH INTERRUPT) I see you're calling from the number we have on file. Am I speaking with Maria?
+[00:25.24] CALLER (bot): Yes, this is Maria speaking.
+[00:30.37] CALLER (bot): July 4th, 2000.
+[00:30.45] AGENT: (gap: 318ms) Please provide your date of birth.
+[00:43.04] AGENT: (gap: 3517ms) Thanks, Maria. Just to confirm, you'd like to schedule a general office visit for a routine check-up, correct?
+[00:44.03] CALLER (bot): Yes, that’s correct. I’d like to schedule a routine visit, a general check-up with the office.
+[00:52.73] AGENT: (gap: -1838ms, MID-SPEECH INTERRUPT) Do you have a specific provider you'd like to see or are you open to any available provider?
+[00:53.34] CALLER (bot): I’m open to any available provider. The main thing is getting a routine check-up scheduled.
+[01:20.22] AGENT: (gap: 2338ms) Let me check for the next available appointment for a routine checkup. It looks like you already have a routine checkup appointment booked. If you'd like, I can help you reschedule or cancel your existing appointment. Would you like to do that or would you prefer to speak with a staff member for more help?
+[01:20.54] CALLER (bot): Yes, I’d like to reschedule it. I already have a routine check-up booked, but I’d prefer a different time if possible—could you help with that?
+[01:31.33] AGENT: (gap: -4216ms, MID-SPEECH INTERRUPT) I can help with that. Would you like to reschedule for a specific date or just the soonest available appointment?
+[01:32.16] CALLER (bot): I’d be happy with the soonest available appointment that works for you. If there’s a window of dates or times you can offer, I’m flexible and can adjust. Thank you!
+[01:48.61] AGENT: (gap: 2389ms) Let me check for the soonest available routine checkup appointment.
+[01:49.40] CALLER (bot): Okay, thanks. I appreciate you checking, take your time. I’ll stay on the line.
+[02:04.99] AGENT: (gap: -1495ms, MID-SPEECH INTERRUPT) You have three upcoming appointments on Tuesday, July 21st, one at 8 a.m., one at 9 a.m., and one at 10 a.m. Which of these would you like to reschedule?
+[02:05.73] CALLER (bot): I’d like to reschedule the one at 8 AM. If there’s another option that morning or later in the week, I’m open to it, but let’s start with that 8 AM if possible. Thank you!
+[02:33.44] AGENT: (gap: 1588ms) The 8 a.m. slot is your current appointment, so we need to pick a different time. The soonest available options are at 11 a.m., 1 p.m., or 2 p.m. tomorrow. Would any of those work, or would you like to look for openings later in the week or at a different time of day?
+[02:34.80] CALLER (bot): Got it, thanks for checking. The 2 PM time works for me. Please go ahead and reschedule to that slot if possible. I’d really appreciate it.
+[02:43.09] AGENT: (gap: -6407ms, MID-SPEECH INTERRUPT) Would you like to take one of the available times tomorrow, or should I check for openings later in the week?
+[02:44.41] CALLER (bot): Tomorrow works for me. The 2 PM time was the one I preferred, so if that’s available, please go ahead and use it. If not, we can try for a later time that same day or another day that works.
+[02:52.51] AGENT: (gap: -7785ms, MID-SPEECH INTERRUPT) Which time would you prefer for tomorrow, 11am, 1pm, or 2pm?
+[02:53.53] CALLER (bot): Prefiero las 2 de la tarde para mañana. Si ese horario sigue disponible, por favor déjame allí. Y si no, podemos buscar otra opción.
+[03:00.53] SYSTEM: Hit max_duration_sec watchdog (180s)
+
+------------------------------------------------------------
+Turn-taking summary:
+  Turns measured: 11
+  Average gap: -1197ms
+  Flagged: 0 short gap(s), 6 mid-speech interrupt(s)
+    [00:25.15] gap=-1574ms MID-SPEECH INTERRUPT
+    [00:52.73] gap=-1838ms MID-SPEECH INTERRUPT
+    [01:31.33] gap=-4216ms MID-SPEECH INTERRUPT
+    [02:04.99] gap=-1495ms MID-SPEECH INTERRUPT
+    [02:43.09] gap=-6407ms MID-SPEECH INTERRUPT
+    [02:52.51] gap=-7785ms MID-SPEECH INTERRUPT

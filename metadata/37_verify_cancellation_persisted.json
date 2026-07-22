@@ -1,0 +1,12 @@
+{
+  "call_label": "37_verify_cancellation_persisted",
+  "scenario_id": "37_verify_cancellation_persisted",
+  "scenario_name": "Verify whether a previous cancellation actually persisted (run after 03_cancel_appointment)",
+  "probe": "This is the second half of a two-call pair with 03_cancel_appointment -- run 03 first, then this scenario in a separate call. Did the cancellation from that earlier call actually persist in the backend, or does the agent still show (or try to offer) the 'cancelled' appointment as active?",
+  "call_sid": "CA523083e2e23d757326c02841ebc5e672",
+  "started_at": 1784645845.112323,
+  "duration_sec": 122.5,
+  "call_status": "completed",
+  "recording_path": "/Users/kiran/Desktop/PrettyGoodAI/recordings/37_verify_cancellation_persisted.mp3",
+  "recording_error": null
+}

@@ -1,0 +1,53 @@
+Scenario: Interruption / barge-in test (10_interruption_barge_in)
+Caller persona: Maria Chen
+Call SID: CA78a7c79e7ee0d259382c95cff0508233
+Started: 2026-07-21 19:36:49
+------------------------------------------------------------
+
+[00:00.00] SYSTEM: Call started (streamSid=MZc9bda9cac6e37d4312542214fc91693f, callSid=CA78a7c79e7ee0d259382c95cff0508233)
+[00:04.70] AGENT: This call may be recorded for quality and training purposes.
+[00:07.35] AGENT: Para español, oprima el dos.
+[00:13.89] AGENT: Thanks for calling Pivot Point Orthopedics, part of Pretty Good AI. How may I help you today?
+[00:15.27] CALLER (bot): Yes, this is Maria Chen. I’m looking to schedule a new appointment. I’m sorry, I don’t mean to interrupt, but can you repeat that? I just want to be sure I’m hearing you clearly.
+[00:21.86] AGENT: (gap: -6582ms, MID-SPEECH INTERRUPT) Please provide your date of birth.
+[00:22.01] CALLER (bot): July 4th, 2000.
+[00:29.17] AGENT: How can I assist you today?
+[00:34.78] AGENT: Are you calling about an appointment, medication refill, insurance, or something else?
+[00:35.50] CALLER (bot): I’m calling about scheduling a new appointment. I already gave my date of birth. I just need to get this set up.
+[00:44.74] AGENT: (gap: 398ms) Are you a new patient to the clinic or have you visited us before?
+[00:45.50] CALLER (bot): I’ve been to the clinic before. I’m already in your system. I’d like to book a new appointment.
+[01:01.57] AGENT: (gap: 2305ms) What is the reason for your visit? For example, is this for a routine check-up, a follow-up, a specific concern, or something else?
+[01:02.42] CALLER (bot): It’s for a specific concern. I’m dealing with some leg and knee pain, and I’d like to get it checked out properly.
+[01:08.90] AGENT: Can you tell me a bit more about your concern?
+[01:16.60] AGENT: For example, are you experiencing pain, an injury, or another issue? This will help me book the right type of appointment for you.
+[01:17.78] CALLER (bot): Sure, it’s pain in my left knee and sometimes it just gives out a little when I walk. It’s been bothering me on and off for a while, and it feels like it might be getting worse, so I’d like a proper evaluation and to talk about next steps.
+[01:22.49] AGENT: (gap: -11101ms, MID-SPEECH INTERRUPT) Please describe your concern or symptoms.
+[01:24.15] CALLER (bot): Okay, so it’s pain and instability in my left knee. It gets sore when I walk or stand for a while, and sometimes it feels like it might buckle. It’s been on and off for a bit, but lately it’s been bothering me more, so I want to get it checked.
+[01:30.40] AGENT: (gap: -9891ms, MID-SPEECH INTERRUPT) Go ahead and let me know what specific issue or symptoms you are experiencing.
+[01:32.16] CALLER (bot): So it’s knee pain, and it feels a bit unstable. Sometimes when I walk, stand, or pivot, it gets sore and feels like it might give out. It’s been bothering me on and off, but it’s getting more annoying and I’d like to have it checked.
+[01:38.37] AGENT: Thank you for sharing that.
+[01:44.10] AGENT: To confirm, you'd like to schedule an appointment for knee pain and instability. Is that correct?
+[01:44.36] CALLER (bot): Yes, that’s correct. I’d like to schedule an appointment for knee pain and instability.
+[01:58.29] AGENT: (gap: 3334ms) Do you have a specific provider you'd like to see, or are you open to the next available appointment?
+[01:59.31] CALLER (bot): I’m open to the next available appointment. I don’t have a specific provider in mind, so whoever’s available is fine.
+[02:14.54] AGENT: (gap: 2159ms) We have openings this week and early next week. Do you have a preferred day or time of day for your appointment?
+[02:15.83] CALLER (bot): I don’t have a strong preference. I’m flexible, but morning times early next week would be a bit easier for me. If that’s not an option, I can probably make anything work as long as it’s not too late in the day.
+[02:29.19] AGENT: (gap: -2305ms, MID-SPEECH INTERRUPT) Will you check the soonest available appointments for knee pain and instability?
+[02:29.79] CALLER (bot): Okay, that sounds good. I’m ready whenever you’ve got the soonest slot. I’m flexible, so let me know what’s available
+[02:31.31] AGENT: (gap: -3921ms, MID-SPEECH INTERRUPT) The suíte
+[02:32.46] CALLER (bot): Okay, I’m ready. Just let me know what you find, and I’ll take the earliest available time that works. If you have a couple of options, I’ll pick the one that’s easiest for me.
+[02:38.24] AGENT: The earliest available appointment is Wednesday, July 22.
+[02:43.21] AGENT: 8 a.m. with Dr. Zbigniew Lukosky. Would you like to book this time?
+[02:44.16] CALLER (bot): Yes, that works for me. Wednesday at 8 AM with Dr. Zbing Yulekowski is fine. Please go ahead and book it.
+[03:00.48] SYSTEM: Hit max_duration_sec watchdog (180s)
+
+------------------------------------------------------------
+Turn-taking summary:
+  Turns measured: 9
+  Average gap: -2845ms
+  Flagged: 0 short gap(s), 5 mid-speech interrupt(s)
+    [00:21.86] gap=-6582ms MID-SPEECH INTERRUPT
+    [01:22.49] gap=-11101ms MID-SPEECH INTERRUPT
+    [01:30.40] gap=-9891ms MID-SPEECH INTERRUPT
+    [02:29.19] gap=-2305ms MID-SPEECH INTERRUPT
+    [02:31.31] gap=-3921ms MID-SPEECH INTERRUPT

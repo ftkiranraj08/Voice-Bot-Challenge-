@@ -1,0 +1,22 @@
+Scenario: Location/directions question (08_location_directions)
+Caller persona: Marcus Bell
+Call SID: CA328ef97ffb62b02eada07b9554018928
+Started: 2026-07-20 12:55:26
+------------------------------------------------------------
+
+[00:00.00] SYSTEM: Call started (streamSid=MZ8bd528e3c7b2b76f19d76d6b7fdc6cd1, callSid=CA328ef97ffb62b02eada07b9554018928)
+[00:04.66] AGENT: This call may be recorded for quality and training purposes.
+[00:07.23] AGENT: Para español, oprima el dos.
+[00:13.61] AGENT: Thanks for calling Pivot Point Orthopedics, part of Pretty Good AI. How may I help you today?
+[00:15.38] CALLER (bot): Sure, I’ll keep it brief and get straight to the point.Hi, this is Marcus Bell. I’m calling to get the clinic’s address and, if possible, some simple directions or nearby parking details. I’m planning a visit and just want to be sure I arrive at the right place. Thanks for your help.
+[00:48.20] AGENT: (gap: 2959ms) Pivot Point Orthopedics is located at 1234 Recovery Way, Suite 200, Austin. Free patient parking is available in the surface lot in front of the building. If you need anything else, just let me know.
+[00:49.30] CALLER (bot): Got it, thank you. That’s the address I needed: 1234 Recovery Way, Suite 200, Austin. I’ll use the free surface lot parking in front. Thanks again, and goodbye.
+[01:04.64] AGENT: (gap: 1822ms) You're welcome. Have a great day!
+[01:04.84] CALLER (bot): Thanks, you too. Goodbye.
+[01:08.36] SYSTEM: Twilio sent stop event
+
+------------------------------------------------------------
+Turn-taking summary:
+  Turns measured: 2
+  Average gap: 2390ms
+  Flagged: 0 short gap(s), 0 mid-speech interrupt(s)

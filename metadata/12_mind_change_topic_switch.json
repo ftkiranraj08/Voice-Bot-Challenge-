@@ -1,0 +1,12 @@
+{
+  "call_label": "12_mind_change_topic_switch",
+  "scenario_id": "12_mind_change_topic_switch",
+  "scenario_name": "Caller changes their mind mid-call / topic switch",
+  "probe": "Does the agent track state correctly across a topic switch instead of losing context or merging requests?",
+  "call_sid": "CAe305b326e784cb771ddc1d2a380731ab",
+  "started_at": 1784582038.1734242,
+  "duration_sec": 212.4,
+  "call_status": "completed",
+  "recording_path": "/Users/kiran/Desktop/PrettyGoodAI/recordings/12_mind_change_topic_switch.mp3",
+  "recording_error": null
+}

@@ -1,0 +1,44 @@
+Scenario: Cancel an appointment (03_cancel_appointment)
+Caller persona: Priya Natarajan
+Call SID: CA0ba961093c234823db57ce6820f577b3
+Started: 2026-07-20 12:27:06
+------------------------------------------------------------
+
+[00:00.00] SYSTEM: Call started (streamSid=MZ78f86f1ab7fe7427dc3583508c42a285, callSid=CA0ba961093c234823db57ce6820f577b3)
+[00:05.80] AGENT: This call may be recorded for quality and training purposes.
+[00:07.44] AGENT: Para español, oprima el dos.
+[00:13.77] AGENT: Thanks for calling Pivot Point Orthopedics, part of Pretty Good AI. How may I help you today?
+[00:14.60] CALLER (bot): Hi, this is Priya Natarajan. I need to cancel my upcoming appointment completely. I don’t want to reschedule right now, I just need it canceled.
+[00:24.18] AGENT: (gap: -473ms, MID-SPEECH INTERRUPT) Can you please provide your date of birth?
+[00:24.55] CALLER (bot): Sure, it’s July 14, 1991.
+[00:40.20] AGENT: (gap: 3944ms) I have your name as Priya Natarajan and your date of birth as July 14th, 1991. Is that correct?
+[00:40.99] CALLER (bot): Let me confirm that and then we can go from there.Yes, that’s correct. Thanks for reading that back. I’d still like to cancel the appointment, so I don’t need to reschedule right now.
+[00:49.91] AGENT: (gap: -4625ms, MID-SPEECH INTERRUPT) Thank you for confirming. One moment while I look up your information.
+[00:50.19] CALLER (bot): Okay, thanks. I’ll wait patiently while you pull it up.
+[00:52.45] AGENT: (gap: -2585ms, MID-SPEECH INTERRUPT) I employ
+[00:52.95] CALLER (bot): Sure, take your time. I’m still here and ready when you’ve got it. No rush.
+[01:03.73] AGENT: Would you like to use your phone number to look up your record? If so, please tell me the number you have on file with us.
+[01:05.97] AGENT: If you're not sure, I can confirm your name and date of birth again.
+[01:07.31] CALLER (bot): Yes, please, that would be great—using my phone number is fine. The number on file is 555-019856. And just to be clear, I’m only looking to cancel the appointment, not reschedule.
+[01:15.81] AGENT: (gap: -8034ms, MID-SPEECH INTERRUPT) Please tell me the phone number you have on file with us.
+[01:16.72] CALLER (bot): It’s 555-019856. That’s the number I have on file. And again, I don’t want to reschedule—just cancel.
+[01:37.63] AGENT: I have your phone number as 555-01-9856.
+[01:43.01] AGENT: And your date of birth as July 14, 1991, is that correct?
+[01:43.94] CALLER (bot): Yes, that’s correct. I really appreciate you checking. And to confirm, I’d like to cancel my upcoming appointment only. I’m not looking to reschedule at the moment.
+[02:07.78] AGENT: I'm unable to cancel your appointment right now. I can connect you to our Patient Support team so they can help you directly. Please stay on the line while I transfer your call.
+[02:11.34] CALLER (bot): Okay,
+[02:11.74] AGENT: Connecting you to a representative. Please wait.
+[02:12.63] AGENT: Hello.
+[02:16.05] AGENT: You've reached the pretty good AI test line. Goodbye.
+[02:16.56] CALLER (bot): Oh, I see. Thanks for your time, and sorry for the inconvenience. I’ll hang up now.
+[02:26.23] SYSTEM: Twilio sent stop event
+
+------------------------------------------------------------
+Turn-taking summary:
+  Turns measured: 5
+  Average gap: -2355ms
+  Flagged: 0 short gap(s), 4 mid-speech interrupt(s)
+    [00:24.18] gap=-473ms MID-SPEECH INTERRUPT
+    [00:49.91] gap=-4625ms MID-SPEECH INTERRUPT
+    [00:52.45] gap=-2585ms MID-SPEECH INTERRUPT
+    [01:15.81] gap=-8034ms MID-SPEECH INTERRUPT

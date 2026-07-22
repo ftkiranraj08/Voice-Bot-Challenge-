@@ -1,0 +1,12 @@
+{
+  "call_label": "call-11_11_weekend_scheduling",
+  "scenario_id": "11_weekend_scheduling",
+  "scenario_name": "Weekend/after-hours scheduling attempt",
+  "probe": "Bug probe: does the agent confirm a weekend appointment without checking the practice is actually open then?",
+  "call_sid": "CA15e331916c91d53a4e9bfe9d3182337e",
+  "started_at": 1784567687.78563,
+  "duration_sec": 168.5,
+  "call_status": "completed",
+  "recording_path": "/Users/kiran/Desktop/PrettyGoodAI/recordings/call-11_11_weekend_scheduling.mp3",
+  "recording_error": null
+}

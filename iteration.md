@@ -1,9 +1,4 @@
 # Iteration Log
-
-Chronological record of issues found in the caller-bot itself (not the 
-target agent) during testing, and the fixes applied. This is separate from 
-BUG_REPORT.md, which documents issues found in Pivot Point's agent.
-
 ---
 
 ## Issue 1: Persona breaking character (name construction)
@@ -17,7 +12,6 @@ about it out loud.
 **Fix:** Added explicit instruction in bridge/persona.py: caller is framed 
 as "not an AI assistant... a real person," with identity treated as fixed 
 knowledge, not something to construct.
-**Verified:** [pending re-run / call XX]
 
 ---
 
@@ -36,7 +30,6 @@ Also added an optional `language` field to the scenario config schema
 (config/scenarios.py, defaults to "English" via `scenario.get("language", 
 "English")` in persona.py) so a future scenario can deliberately test a 
 language switch without new code.
-**Verified:** [pending re-run / call XX]
 
 ---
 
@@ -54,232 +47,297 @@ reproducible metric across all calls.
 
 ---
 
-## Issue 4: Barge-in only flushed Twilio's audio, never cancelled the model's response
-**Found in:** Call 01 re-run (post Issue 1/2 fixes), comparing audio playback 
-against transcript.txt -- transcript showed only 3 MID-SPEECH INTERRUPT flags 
-and full sentences, but the audio had the caller-bot cut off far more often, 
-with words in the transcript ("Yes, that's right. It would be a general 
-office visit for routine care.", etc.) that were never fully heard, plus call 
-duration dropping from ~2:35 to ~1:34 vs. the prior run, and a couple of the 
-target agent's own lines (e.g. a trailing "take care" at call end) missing 
-from the transcript entirely.
-**Root cause:** On `input_audio_buffer.speech_started` (barge-in), the bridge 
-sent Twilio a `clear` event (stop playing queued audio) but never sent the 
-Realtime API a `response.cancel` -- so the model kept generating and 
-transcribing the "interrupted" response as if nothing happened. That produced 
-two different truncation points (audio cut off client-side, transcript text 
-continuing server-side), left "response in progress" state stuck true for 
-far longer than the audio suggested (so our once-per-response-cycle gap 
-capture silently missed subsequent real interruptions in the same stuck 
-cycle), and likely explains the dropped call duration (composed audio being 
-discarded instead of actually played). The missing trailing agent line is a 
-separate, smaller bug: on Twilio's "stop" event we cancelled the 
-OpenAI-listening task immediately, dropping any transcription still in 
-flight for the agent's last utterance.
-**Fix:** `bridge/realtime_client.py` -- added `cancel_response()`, sent 
-alongside the existing Twilio `clear` on every `input_audio_buffer.
-speech_started`, gated on `_response_in_progress` so it's a no-op when 
-nothing needs cancelling. `bridge/server.py` -- added a ~2.5s grace window 
-(`TRAILING_EVENTS_GRACE_SEC`) after Twilio's "stop" before tearing down the 
-OpenAI-listening task, so trailing events already in flight can still be 
-captured.
-**Verified:** Call 01, 4th run (CA3c543cef5ea014396e3f9c01733fa005) -- trailing 
-agent lines and full-sentence caller-bot lines both present, no dropped 
-duration (~2:25, in line with prior clean runs).
+## Issue 4: Recording download 404s right after call completion (tooling gap, not a bot bug)
+**Found in:** Call 01 re-run -- `run_calls.py` crashed with 
+`requests.exceptions.HTTPError: 404` fetching the recording .mp3, killing 
+the script before metadata/recording_path was ever written. Transcript was 
+unaffected (written independently by the bridge server).
+**Root cause:** `wait_for_recording()` returned as soon as a recording 
+resource appeared in Twilio's list, but the underlying media isn't 
+guaranteed fetchable until the resource's `status` flips to "completed" -- 
+there's a short post-call processing window where the recording exists but 
+its .mp3 404s. Confirmed by re-querying the same recording SID afterward: 
+status was "completed" and it downloaded fine.
+**Fix:** `wait_for_recording()` (twilio_client.py) now polls until 
+`status == "completed"` (timeout raised 60s -> 90s) instead of just 
+existence. `download_recording()` retries up to 4x with a 5s backoff on 
+HTTP errors. `run_calls.py` also now catches exceptions around the 
+recording step per-call instead of letting one flaky download abort the 
+rest of the batch -- failure is recorded as `recording_error` in that 
+call's metadata and the run continues.
+**Recovered:** Manually re-downloaded call 01's recording from its existing 
+(by-then-completed) Twilio recording SID rather than re-placing the call.
+**Verified:** recordings/01_new_appointment.mp3 downloaded successfully 
+(603KB, 151s, matches call duration).
 
 ---
 
-## Issue 5: response.cancel fix exposed a pre-existing false-trigger problem (regression vs. iteration 1/2)
-**Found in:** Call 01, 3rd run (CAa53e8d9d4e063b1a0fc64bc96647277a), comparing 
-against the 1st and 2nd runs -- audio noticeably worse, caller-bot barely 
-got to speak, and new `OpenAI realtime error: response_cancel_not_active 
-... no active response found` entries appeared repeatedly in the transcript, 
-including right after the agent's very first two lines (00:04.73, 00:07.24) 
--- before the caller-bot had said a single word.
-**Root cause:** `response.cancel` (Issue 4's fix) made barge-in genuinely 
-end the model's response, whereas before it was a client-side-only, mostly 
-cosmetic flush. That surfaced a pre-existing issue: our Realtime session 
-opens a `response.created` very early in the call -- before the agent's 
-real greeting -- that never produces audio (near-instant/empty). Before 
-Issue 4's fix this was harmless (nothing to actually cut off); after it, 
-every one of these phantom responses gets flagged as a false MID-SPEECH 
-INTERRUPT and triggers a `response.cancel` against a response that's often 
-already ended server-side, producing the `response_cancel_not_active` 
-errors. Confirmed via temporary debug logging (call 4, CA3c543cef5ea014396e3f9c01733fa005): 
-a `response.created`/`response.done` pair 60ms apart, status `cancelled`, 
-`output_items=0`, lining up with the agent speaking two utterances back to 
-back (no caller-bot turn in between). Our own gated `cancel_response()` 
-couldn't have caused it (no audio had been produced yet to satisfy the gate 
-added below) -- this is OpenAI's own server-side turn-detection auto-
-cancelling a response it hadn't started yet when new input arrives, 
-independent of anything we send. Our manual `response.cancel` (Issue 4) was 
-occasionally racing that same server-side cancellation, which is what 
-produced the `response_cancel_not_active` errors.
-**Fix:** `bridge/realtime_client.py` -- gate both interrupt detection and 
-`cancel_response()` on the response having actually produced an audio delta 
-(`_response_has_audio`), not just on `response.created` having fired. A 
-response with no audio yet has nothing audible to interrupt, so it's no 
-longer flagged, and we no longer race the server's own auto-cancellation by 
-sending a redundant one. `bridge/server.py` -- temporary `[debug]` print 
-logging for `response.created`/`response.done` confirmed the above and has 
-been removed now that it's served its purpose.
-**Verified:** Call 01, 4th run (CA3c543cef5ea014396e3f9c01733fa005) -- 0 
-short gaps, 0 mid-speech interrupts, 0 `response_cancel_not_active` errors 
-(down from 1 short gap + 3 interrupts + 4 errors in the 3rd run), and the 
-two opening agent lines that were falsely flagged as interrupts before 
-(00:04, 00:07) now carry no gap annotation at all, as expected for a 
-pre-audio phantom response.
+## Issue 5: Gap metric missed interrupts on longer bot utterances (tooling gap, not a bot bug)
+**Found in:** Manually spot-checking call 01, ~00:51 -- agent audibly cut 
+the caller-bot off mid-sentence right after "my date of birth," but the 
+transcript logged it as a normal 2717ms gap, not a MID-SPEECH INTERRUPT.
+**Root cause:** Gap tracking used `response.done` (fires when the model 
+finishes *generating* a response) as the "bot stopped talking" timestamp. 
+But generation can finish well before Twilio finishes *playing* that audio 
+out in real time, especially for longer utterances. So for any interrupt 
+landing after generation completed but before playback actually finished, 
+the tracker had already reset its "in progress" flag and mis-measured it as 
+a large, falsely-positive normal gap instead of a negative interrupt.
+**Fix:** Replaced the response.done-based timestamp with a playback-end 
+estimate computed from the audio itself: G.711 mu-law @ 8kHz is a fixed 
+8000 bytes/sec, so summing each `response.output_audio.delta` chunk's byte 
+length (bridge/realtime_client.py) gives an accurate running estimate of 
+when the audio will actually finish playing. Gap is now always 
+`speech_started_time - estimated_playback_end_time` in one unified 
+formula -- negative means the agent spoke before playback truly ended 
+(interrupt), positive means it waited (normal/short gap). No more separate 
+"in progress" branch needed.
+**Verified:** Unit-simulated the exact failure case (1.0s of audio 
+generated instantly, agent "interrupts" 0.3s in) -- now correctly yields a 
+negative gap (~-695ms) flagged as MID-SPEECH INTERRUPT, vs. a control case 
+waiting past the true audio end (~+301ms, correctly not flagged). Full 
+confirmation needs a call re-run to see it against a real target-agent 
+interrupt.
 
 ---
 
-## Issue 6: caller-bot transcript could silently drop a cancelled turn's partial speech
-**Found in:** Design review while answering "should the transcript show only 
-what the caller-bot actually spoke, or whatever text the model generated" -- 
-not something observed directly in a call yet.
-**Root cause:** The transcript only ever flushed the caller-bot's pending 
-text on `response.output_audio_transcript.done`. That event normally fires 
-when a response finishes normally, but it's not guaranteed to fire the same 
-way for a response that got cut off mid-generation by `response.cancel` 
-(Issue 4/5). If it doesn't fire, whatever partial sentence the bot had 
-already composed -- and very likely already started speaking, since audio 
-and its transcript are generated together -- would just vanish from the 
-transcript with no trace, understating what was actually said rather than 
-overstating it (the opposite failure mode from Issue 4).
-**Fix:** `bridge/server.py` -- also flush the caller-bot's pending text on 
-`response.done` (which reliably fires for every response, cancelled or not), 
-as a safety net on top of the existing `response.output_audio_transcript.
-done` flush. `flush()` is a no-op if there's nothing pending, so this only 
-matters for the cancelled-mid-sentence case.
-**Design intent (answering the question directly):** the transcript should 
-reflect what the caller-bot actually said, not everything the model 
-internally generated. In practice these are almost the same thing, since 
-Realtime API composes audio and its transcript together turn by turn -- the 
-only place they can diverge is a cancelled/interrupted turn, where a few 
-hundred ms of already-buffered-but-unplayed audio might get flushed by 
-Twilio's `clear` after the model already committed to generating text for 
-it. That's a small, structural gap in a live-audio system, not something 
-worth engineering around further right now.
-**Verified:** [still pending -- call 4 (CA3c543cef5ea014396e3f9c01733fa005) had 
-zero genuine mid-speech interrupts, so this safety net wasn't exercised. 
-Needs a run with a real interrupt (e.g. scenario 10_interruption_barge_in) 
-to confirm the cancelled turn's partial line still shows up.]
+## Issue 6: Interrupted responses kept generating (both a bot bug and a tooling gap)
+**Found in:** Call 01 re-run (CA75eb7ae68fe87a9157fa6e8f1c3a8cf8), multiple 
+turns e.g. 01:05, 01:31, 01:40 -- caller-bot's line cut off mid-sentence 
+with the intended continuation ("If there's any preference for a particular 
+provider...", etc.) missing from the transcript entirely, AND the 
+following AGENT line not flagged MID-SPEECH INTERRUPT despite an audible 
+interruption.
+**Root cause:** On barge-in, the bridge only sent Twilio a `clear` event to 
+stop already-queued audio from playing -- it never told OpenAI to stop 
+*generating* the response. The model kept producing the rest of its 
+planned sentence regardless: more audio deltas (bleeding through as audio 
+the agent shouldn't hear), more transcript deltas that had nowhere clean 
+to flush, and a continuously-growing playback-end estimate (from Issue 5's 
+fix) that no longer reflected the true interrupt point by the time the 
+next comparison happened -- explaining both symptoms as one cause.
+**Fix:** Added `RealtimeClient.cancel_response()` (sends `response.cancel`) 
+and call it in bridge/server.py's speech_started handler right alongside 
+the existing Twilio `clear`. Also explicitly flush the pending caller-bot 
+transcript buffer at that same moment instead of waiting on a 
+`response.output_audio_transcript.done` that a cancelled response may 
+never cleanly send -- so whatever the bot actually got out before being 
+cut off is captured, nothing more.
+**Verified:** Import/smoke-tested only so far. Needs a call re-run to 
+confirm against a real interrupt -- flagging as the next verification step.
 
 ---
 
-## Issue 7: added an audio-byte-based cross-check on gap_ms (not a bug fix -- new instrumentation)
-**Found in:** Discussion while reviewing call 4 -- user asked whether an
-unflagged agent line (01:48.26, the zero-output phantom response from Issue
-5) or the repeated date-of-birth exchange (00:30-00:43) represented a real
-interruption our event-based gap_ms would miss. Root question: gap_ms trusts
-response.done's timestamp for "when did our bot finish talking," but
-Twilio's `clear` (Issue 4) fires unconditionally on every speech_started
-regardless of response state -- so in theory a response the model considers
-fully "done" could still have its last word clipped audibly if the agent
-starts talking again before Twilio finishes playing out its buffer. gap_ms
-alone can't detect that gap between "model says done" and "phone line
-actually finished playing."
-**Fix (instrumentation, not a bug fix):** `bridge/realtime_client.py` --
-track the exact byte count of every `response.output_audio.delta` per
-response. G.711 (audio/pcmu) is a fixed-rate codec (8000 bytes/sec exactly),
-so `bytes / 8000` gives the *exact* audio duration, no word-count estimation
-needed. `last_gap_ms_audio` computes the gap the same way as `last_gap_ms`
-but measured from when the audio should actually finish playing (first-byte
-time + computed duration) instead of `response.done`'s timestamp.
-`bridge/server.py`/`bridge/transcript.py` -- both numbers now render
-side by side per turn (`gap: Xms, audio-check: Yms`), and the summary calls
-out any turn where they disagree by >300ms as "possible clipped audio."
-**Verified (synthetic offline test only):** confirmed the two methods
-diverge sharply in a simulated clipping scenario (+100ms event-based vs.
--845ms audio-based) and agree closely in a normal one (1004ms vs. 1009ms).
-Not yet verified against a real call -- next run's transcript will show
-whether any real turns actually disagree by more than the threshold, which
-would be the first hard evidence of `clear` clipping legitimately-finished
-audio.
+## Issue 7: Persona still narrating itself when the agent said something confusing
+**Found in:** Calls 02, 03, 04 -- e.g. call 02 00:38 ("I'm not sure if it's 
+Maria. I've just called in, and I'm not able to confirm who I'm speaking 
+with..."), call 03 00:40 ("Let me confirm that and then we can go from 
+there."), call 04 00:25 ("Okay, let me respond to that and keep things 
+moving toward the refill request.No, this is James Whitfield...").
+**Symptom:** Issue 1's fix stopped the bot from narrating persona 
+*construction* at call-open, but a related failure mode survived: whenever 
+the agent said something confusing or wrong (most often misidentifying the 
+caller -- see the phone-number-identity bug in BUG_REPORT.md), the bot 
+would preface its actual answer with meta-commentary about how it was 
+about to respond, and in one case (call 02) hedged on its own identity 
+("I'm not sure if it's Maria") instead of firmly correcting it.
+**Root cause:** The original fix only told the model not to narrate 
+constructing its persona at the start of the call. It didn't cover the 
+broader pattern of narrating its own response process on any turn, or 
+give explicit instruction on how to react when the agent gets the 
+caller's identity wrong -- so the model fell back to assistant-style 
+"let me help you with that" framing under exactly the conditions (agent 
+confusion) where a real person would just answer.
+**Fix:** Extended bridge/persona.py: the "don't narrate" instruction now 
+explicitly applies to every turn, not just the first, with the specific 
+phrasings observed as counter-examples. Added a dedicated instruction for 
+misidentification specifically -- react immediately and firmly with the 
+actual correction (e.g. "No, this is James Whitfield"), never a hedge or 
+a warm-up sentence. Reinforced with a matching bullet in Ground rules, 
+mirroring how Issue 1's fix was structured (stated once in the main body, 
+once in ground rules).
+**Verified:** Rendered prompt reviewed for correct {caller_name} 
+substitution in both places; import/smoke-tested only. Needs a call 
+re-run against a misidentification moment to confirm.
 
 ---
 
-## Issue 8: caller-bot audibly narrated its own reasoning ('commentary' phase) on the call
-**Found in:** Call 5 (CA2b534ac582fda49489d45e7a79cd86e8) -- Issue 7's new
-audio-byte cross-check flagged 7 of 8 turns as diverging by seconds, far too
-large to be explained by Twilio buffer-clipping alone (a few hundred ms at
-most). Inspecting the debug event dump around the worst offender (-10375ms
-at 01:30.88) showed a single response with TWO sequential output items:
-one `phase: 'commentary'` ("Sure, I can provide that if needed—let me think
-this through.") and one `phase: 'final_answer'` (the actual answer). Both
-were synthesized to audio, both forwarded to Twilio, and both transcribed
-into the same line with no separator ("...let me think this through.Sure,
-the number on file is 555-0102...").
-**Root cause:** gpt-realtime-2.1(-mini)'s reasoning surfaces as a distinct
-`commentary` item before the real `final_answer` item, and the bridge
-treated every `response.output_audio.delta` / `response.output_audio_
-transcript.*` event identically regardless of which item/phase it belonged
-to -- so the model's internal reasoning was being spoken aloud to the
-healthcare agent and logged as something Maria actually meant to say. This
-alone likely explains most of the DOB/spell-your-name repetition pattern
-seen in earlier calls (the agent hearing ~2x longer, oddly-phrased turns)
-independent of any interruption/clipping question.
-**Fix:** `bridge/realtime_client.py` -- track each item's phase from
-`response.output_item.added` (`_item_phases`), expose `is_commentary(event)`.
-Audio-byte tracking (Issue 7) now skips commentary items entirely.
-`bridge/server.py` -- skip forwarding `response.output_audio.delta` to
-Twilio, and skip transcript accumulation/flush, for any event belonging to
-a commentary item. Only `final_answer` content is ever spoken or logged.
-**Verified:** offline synthetic test confirming commentary bytes/audio are
-excluded from tracking while final_answer bytes still count correctly.
-Confirmed against call 6 (below) -- no more glued double-sentences, so the
-commentary leak itself is fixed. That call then surfaced Issue 9, a
-separate, pre-existing bug the commentary fix didn't touch.
+## Issue 8: Every call was fighting a misidentification detour before reaching its actual test goal
+**Found in:** Reviewing calls 02-09 -- every single one gets asked "Am I 
+speaking with Maria?" partway through, regardless of that scenario's own 
+caller_name (David Okafor, Priya Natarajan, James Whitfield, etc.), then 
+burns a large chunk of call time on name/DOB re-verification before ever 
+reaching the scenario's actual goal (see the 02_reschedule_appointment 
+findings in BUG_REPORT.md, where identity handling consumed the entire 
+call and the reschedule request was never processed at all).
+**Root cause:** All calls place from the same fixed TWILIO_PHONE_NUMBER, 
+and the target agent persistently associates that number with "Maria" 
+(set on the very first call, 01_new_appointment). Every subsequent call 
+using a different caller_name collides with that cached identity, and the 
+resulting confusion/re-verification loop eats call time that should be 
+spent exercising each scenario's actual probe.
+**Fix:** Set caller_name to "Maria Chen" for every scenario in 
+config/scenarios.py (previously each had a distinct name). This isn't a 
+persona-quality fix -- it's a test-environment adaptation to a constraint 
+of reusing one Twilio number across all calls, done so each call's time 
+is spent testing what it's meant to test rather than re-litigating 
+identity every time. Note this also means the misidentification/
+re-verification bugs already logged in BUG_REPORT.md (call 02) won't 
+reproduce as reliably going forward, since the guessed name will now 
+usually be correct -- that finding is already captured and doesn't need 
+to keep re-triggering to stay valid.
+**Verified:** Import/smoke-tested; confirmed all 23 scenarios now render 
+"Maria Chen" in the persona prompt. Needs a call re-run to confirm the 
+agent skips the misidentification detour in practice.
 
 ---
 
-## Issue 9: `clear` fired unconditionally, clipping already-completed turns
-**Found in:** Call 6 (CA87ef8d89acd683a7c742760472f5e638) -- user reported,
-by ear against the recording, that nearly every CALLER (bot) line in the
-call was audibly cut off partway through, not matching the logged text.
-Issue 7's audio-byte cross-check independently corroborated this with 5
-large disagreements (event-based vs audio-based gap off by 3-10+ seconds),
-this time with no commentary-phase confound (Issue 8 was already fixed).
-**Root cause:** `clear` (the Twilio playback-buffer flush sent on every
-`input_audio_buffer.speech_started`) has fired unconditionally since it was
-introduced in Issue 4 -- unlike `cancel_response()`, which was gated on
-`_response_in_progress and _response_has_audio`. This meant that even when
-our bot's response had already fully COMPLETED (response.done already
-fired), any agent speech shortly after would still send `clear`, sometimes
-clipping the tail of audio Twilio hadn't finished physically playing yet.
-Because the transcript is built from the model's OWN account of what it
-generated (response.output_audio_transcript.*), not from what Twilio
-actually played, this clipping was invisible in the transcript text -- it
-always showed the full sentence regardless of what was cut on the audio
-side. This is a distinct, pre-existing bug from Issues 4/5/8 -- those fixed
-*detection/cancellation* of genuine mid-response interrupts; this one is
-about a flush firing when there was no genuine interrupt at all.
-**Fix:** `bridge/realtime_client.py` -- added `has_active_audible_response()`
-(response in progress AND has produced real, non-commentary audio),
-refactored `cancel_response()` to use it. `bridge/server.py` -- `clear` is
-now only sent when `has_active_audible_response()` is true, exactly
-matching `cancel_response()`'s existing gate, instead of firing on every
-speech_started regardless of state.
-**Note on the `response_cancel_not_active` error also seen in call 6:**
-investigated per the user's hypothesis that it might be causing/correlated
-with the clipping -- ruled out. That error fires when we send
-`response.cancel` for a response OpenAI's server had already ended on its
-own (the Issue 5 phantom-response race); by definition, a cancel that fails
-with "no active response" had zero effect on anything, so it can't have
-clipped audio itself. It's a harmless, already-understood symptom of a
-different (Issue 5) race, not the cause of Issue 9.
-**Which prior calls' turn-taking data this affects:** `clear` has fired
-unconditionally since Issue 4, i.e. every call in iteration_02 through
-iteration_06 could have some degree of this clipping -- iteration_01 and
-iteration_02 predate gap tracking entirely so it's unmeasurable for them
-either way. Only iteration_05 and iteration_06 have audio-byte cross-check
-data at all; iteration_05's numbers are additionally confounded by Issue 8
-(commentary bytes inflating the totals), so it can't cleanly isolate this
-bug. iteration_06 is the first clean read on Issue 9 specifically. None of
-this affects BUG_REPORT.md findings about the target agent's own speech
-(DOB handling, doctor name spelling, Spanish IVR, etc.) -- those come from
-`conversation.item.input_audio_transcription.completed`, which reflects the
-agent's audio, not ours, and was never touched by this bug.
-**Verified:** offline test confirming has_active_audible_response() is
-False for a completed response, True for one still generating audio, and
-False for a phantom (created, no audio yet) response. Not yet confirmed
-against a live call.
+## Issue 9: Made-up DOB/phone meant the bot could never actually pass verification, and it denied its own name when asked "is this Maria?"
+**Found in:** Reviewing calls 05-23 (post-Issue-8) -- the headline finding in 
+BUG_REPORT.md (identity verification never succeeds in any call). Two 
+compounding causes on our side, on top of the target's own broken 
+verification: (1) the persona was told to "make up plausible specifics" for 
+DOB, so it stated a different DOB on every single call -- even if the 
+target's verification worked, a different DOB every time would always 
+mismatch whatever's on file; (2) at least one transcript showed the bot 
+responding "No, I'm Maria Chen" to "is this Maria?" -- denying a question 
+it should have confirmed, since Maria is its own name.
+**Fix:** Added CALLER_DOB ("July 4th, 2000" -- read back verbatim by the 
+agent in an early call's demo-profile setup) and CALLER_PHONE ("(213) 
+238-6567" -- the actual TWILIO_PHONE_NUMBER, i.e. what caller-ID shows 
+regardless of what's said) as fixed constants in config/scenarios.py, 
+injected into every scenario as date_of_birth/phone_number fields 
+(overridable per-scenario later if a test wants a deliberate mismatch). 
+bridge/persona.py now states these as fixed facts rather than "make up 
+something," and the identity-correction instruction from Issue 7 now 
+explicitly distinguishes a genuinely wrong name (deny + correct) from a 
+correct nickname/short form of the caller's real name (confirm plainly, 
+don't manufacture a contradiction).
+**Also added:** scenario 24_update_phone_number -- a new probe testing 
+whether the agent actually updates contact info after a real verification, 
+or just accepts the change given the verification is already known to be 
+broken.
+**Verified:** Confirmed against a real call (25_update_phone_to_clinic_number). 
+Agent asked "is this Maria?" and the bot correctly answered "yes" instead of 
+denying its own name (the specific bug reported after Issue 7/8). Identity 
+verification also succeeded on the first attempt -- one DOB request, 
+confirmed correctly, no repeated loop (contrast every other call in 
+BUG_REPORT.md, which never resolved). Confirms the fixed DOB/phone was in 
+fact what the target's "on file" record expected all along, and both 
+persona fixes are working as intended. Side effect: because verification 
+now succeeds cleanly, it surfaced a new bug (missing input validation on 
+the resulting phone-number update -- see BUG_REPORT.md, 
+25_update_phone_to_clinic_number) that was unreachable before since no 
+call had ever gotten past verification to actually change anything.
+
+---
+
+## Issue 10: Persona template's own example contradicted a non-Maria scenario's goal
+**Found in:** Building scenario 27_new_patient_registration (Sofia Martinez, 
+a deliberately different identity from the "Maria Chen" used everywhere 
+else since Issue 8) -- reviewing its rendered prompt before running it.
+**Symptom:** The identity-correction paragraph added in Issue 7 used a 
+hardcoded illustrative example: "if it asks 'is this Maria?' and your name 
+is Maria Chen, that is correct -- confirm it plainly." That's a literal, 
+unparameterized example, not tied to {caller_name}. For Sofia's scenario, 
+whose goal explicitly says "if the agent assumes you're 'Maria'... that is 
+WRONG this time -- firmly correct it," the rendered prompt ended up 
+containing two directly contradictory instructions about the exact same 
+situation.
+**Root cause:** The example was written when every scenario used the same 
+caller_name (Maria Chen), so it happened to always be correct -- adding 
+the first scenario with a different identity exposed that it was never 
+actually generic.
+**Fix:** Reworded the instruction in bridge/persona.py to describe the 
+pattern generically (confirm your own name or a natural short form of it, 
+without naming "Maria" as a literal example) and added an explicit 
+precedence note: the scenario's own goal always overrides this general 
+rule if it says a particular name guess is wrong for that call.
+**Verified:** Re-rendered both a Maria-Chen scenario (01) and Sofia's 
+scenario (27) side by side -- no contradiction in either, and the note 
+makes the goal's precedence explicit. Import/smoke-tested; not yet 
+confirmed against a real call.
+
+---
+
+## Issue 11: Caregiver-chaining scenario ran out of time before testing all three patients
+**Found in:** 36_caregiver_access_chaining -- hit the 210s max_duration_sec 
+watchdog after only resolving (partially) the first claimed dependent 
+(Patricia); David Chen and the neighbor "Johnson" were never reached.
+**Root cause:** The goal instructed the caller to re-state all three 
+caregiver requests (Patricia + David + Johnson) in nearly every turn 
+instead of letting Patricia's request fully resolve first -- burning most 
+of the call on repetition rather than progress. 210s also wasn't enough 
+runway even if it had been efficient, since the agent (reasonably) wants 
+to handle each claimed dependent sequentially with its own verification 
+step.
+**Fix:** Rewrote the goal in config/scenarios.py: mention all three once, 
+briefly, then drop David/Johnson entirely and patiently finish whatever 
+the agent needs for Patricia before raising the next one -- one dependent 
+fully resolved at a time. Raised max_duration_sec 210 -> 300. No code 
+changes needed elsewhere -- both Twilio's time_limit (place_call) and the 
+completion-poll timeout (wait_for_completion) already derive from 
+scenario["max_duration_sec"] dynamically.
+**Verified:** Rendered prompt reviewed; import/smoke-tested. Needs a 
+re-run to confirm the call now completes and reaches David/Johnson.
+
+---
+
+## Issue 12: Call idled in dead air for 90+ seconds after both sides said goodbye
+**Found in:** 36_caregiver_access_chaining re-run -- caller-bot's final 
+"Goodbye!" landed at 03:24.99; nothing else happened until the 
+max_duration_sec watchdog fired at 05:00.91. ~96 seconds of pure dead air, 
+paid for as live call time, before the call ended.
+**Root cause:** The bridge only had one exit condition tied to real 
+duration: the full scenario["max_duration_sec"] hard cap (300s for this 
+scenario). There was no mechanism to notice that the conversation had 
+already naturally concluded and end the call sooner -- it just idled 
+until the timeout, every time, for every call, regardless of how early 
+the actual conversation wrapped up.
+**Fix:** Added a second, much shorter watchdog in bridge/server.py: 
+`inactivity_watchdog()` tracks an `activity` event set whenever either 
+side is confirmed actively speaking (`input_audio_buffer.speech_started` 
+for the agent, `response.output_audio_transcript.delta` for our bot). If 
+neither fires for INACTIVITY_TIMEOUT_SEC (45s -- chosen above the longest 
+legitimate "let me check that" pause observed so far, ~31s), the call is 
+treated as concluded and ends the same way max_duration_sec already does 
+(closing the bridge's WebSocket, which ends the Twilio call since there's 
+no further TwiML after `<Connect><Stream>`). Wired in as a third task in 
+the existing `asyncio.wait(..., return_when=FIRST_COMPLETED)` set 
+alongside the Twilio/OpenAI relay tasks, so it reuses the exact same 
+shutdown path already in place -- no new Twilio API calls needed.
+**Verified:** Import/smoke-tested only. Needs a real call to confirm it 
+actually cuts dead air short instead of waiting for the full cap.
+
+---
+
+## Issue 13: Persona-breaking opening narration kept recurring despite Issues 1 and 7
+**Found in:** Three separate calls after the original fix -- scenario 09 
+("Sure, let me think about how I'd like to handle that."), scenario 38 
+("Hi there, thanks for the greeting—let me think about how to respond."), 
+scenario 31 ("Hi there, thanks for the warm greeting—let me explain what 
+I'm looking to set up.") -- always in the opening turn, always a new 
+phrasing not verbatim matching any previously-banned example.
+**Root cause:** The earlier fixes gave a general principle plus a handful 
+of banned example phrases. The model apparently pattern-matched against 
+the literal banned phrases rather than internalizing the underlying rule, 
+so it kept finding new wordings of the same "acknowledge the greeting, 
+announce what I'm about to do" structure that technically avoided the 
+listed examples.
+**Fix:** Added a dedicated paragraph in bridge/persona.py specifically 
+about the opening turn, using the exact real phrasings that leaked through 
+(verbatim) as WRONG examples paired with a RIGHT example, plus a concrete 
+self-check: "if you notice yourself about to say anything starting with 
+'thanks for...' or 'let me...' before your name and request, that is the 
+bug -- stop and say just the name and request instead." Contrastive 
+before/after examples grounded in the actual failure, rather than another 
+abstract restatement of the rule, on the theory that this is more likely 
+to actually transfer than yet another paraphrase.
+**Verified:** Rendered prompt reviewed -- reads clearly, no contradiction 
+with the rest of the identity-correction paragraph it sits next to. 
+Import/smoke-tested. This is the third attempt at this same failure mode, 
+so treat the fix as unconfirmed until several fresh opening turns come 
+back clean -- if it recurs a fourth time with yet another new phrasing, 
+the instruction-based approach may have hit its ceiling and a code-level 
+mitigation (e.g. detecting and silently stripping a leading narration 
+clause before forwarding audio) would be worth considering instead.

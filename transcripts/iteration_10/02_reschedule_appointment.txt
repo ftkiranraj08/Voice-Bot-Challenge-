@@ -1,0 +1,33 @@
+Scenario: Reschedule an existing appointment (02_reschedule_appointment)
+Caller persona: David Okafor
+Call SID: CA94e972867b6bee2130927c66d7dbcc1d
+Started: 2026-07-20 12:14:20
+------------------------------------------------------------
+
+[00:00.00] SYSTEM: Call started (streamSid=MZ8dd783069620426263258e093d34555b, callSid=CA94e972867b6bee2130927c66d7dbcc1d)
+[00:04.63] AGENT: This call may be recorded for quality and training purposes.
+[00:07.02] AGENT: Para español, oprima el dos.
+[00:13.27] AGENT: Thanks for calling Pivot Point Orthopedics, part of Pretty Good AI. How may I help you today?
+[00:15.16] CALLER (bot): Hi, this is David Okafor. I’ve got an appointment on Tuesday, and I was hoping to move it to sometime next week instead. It’s for a general check-up. If you could help me reschedule, that’d be great.
+[00:35.63] AGENT: I see you're calling from the number we have on file.
+[00:37.24] AGENT: Am I speaking with Maria?
+[00:38.65] CALLER (bot): I'm not sure if it's Maria. I've just called in, and I'm not able to confirm who I'm speaking with. If you could just confirm the name or say who this is, I can catch up from there.
+[00:54.75] AGENT: (gap: 3036ms) To help with your request, could you please provide your full name and date of birth?
+[00:56.27] CALLER (bot): Sure, my name is David Okafor. My date of birth is July 12, 1987. I know I'm a little rushed today, but I’d really appreciate getting that appointment moved.
+[01:24.02] AGENT: (gap: 9610ms) Just to confirm, I have your name as David Okafor and your date of birth as July 12, 1987. Is that correct?
+[01:25.15] CALLER (bot): Yes, that’s correct. David Okafor, and date of birth July 12, 1987. Thanks for confirming. And again, I’d like to reschedule my appointment from Tuesday to sometime next week.
+[01:53.79] AGENT: Would you like me to look up your record using your phone number? If so, could you please provide the number you have on file with us?
+[01:59.86] AGENT: If you're not sure, just let me know and we can confirm your name and date of birth again.
+[02:03.13] CALLER (bot): Okay, let me think this through with you for a moment.I don’t have the phone number on file with me at the moment. Sorry—I'm a bit rushed. But I can confirm my name and date of birth again if that helps you find me in the system: David Okafor, born July 12, 1987. Let me know if you need anything else while we get this rescheduled.
+[02:33.15] AGENT: (gap: 7412ms) Connecting you to a representative. Please wait.
+[02:33.59] CALLER (bot): Thanks, I’ll hold on. No problem. I can wait on the line.
+[02:38.11] AGENT: (gap: -1776ms, MID-SPEECH INTERRUPT) Hello, you've reached the Pretty Good AI Test Line. Goodbye.
+[02:38.65] CALLER (bot): Oh, okay. Goodbye, and thanks for checking in. Have a great day!
+[02:46.90] SYSTEM: Twilio sent stop event
+
+------------------------------------------------------------
+Turn-taking summary:
+  Turns measured: 4
+  Average gap: 4570ms
+  Flagged: 0 short gap(s), 1 mid-speech interrupt(s)
+    [02:38.11] gap=-1776ms MID-SPEECH INTERRUPT

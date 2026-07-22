@@ -1,0 +1,54 @@
+Scenario: Simple new appointment scheduling (01_new_appointment)
+Caller persona: Maria Chen
+Call SID: CA918403a90f876667231810d650044b06
+Started: 2026-07-20 10:26:46
+------------------------------------------------------------
+
+[00:00.00] SYSTEM: Call started (streamSid=MZ466d1442dac8a8aed4a0bed79ccd97a2, callSid=CA918403a90f876667231810d650044b06)
+[00:05.19] AGENT: (gap: -46ms, MID-SPEECH INTERRUPT) This call may be recorded for quality and training purposes.
+[00:07.61] AGENT: (gap: -347ms, MID-SPEECH INTERRUPT) Para español, oprima el dos.
+[00:13.68] AGENT: Thanks for calling Pivot Point Orthopedics, part of Pretty Good AI. How may I help you today?
+[00:14.31] CALLER (bot): Hi, thanks. I’d like to schedule a new appointment for a routine check-up with a doctor, sometime next week if possible. Could you help me with that?
+[00:29.27] AGENT: (gap: -47ms, MID-SPEECH INTERRUPT) He are calling from the number we have on file.
+[00:31.05] AGENT: Am I speaking with Maria?
+[00:32.25] CALLER (bot): Yes, this is Maria speaking. I’m calling to set up that routine check-up for next week. If you can tell me what times are available or what options you have, I’d appreciate it.
+[00:47.09] AGENT: (gap: -279ms, MID-SPEECH INTERRUPT) Please provide your date of birth.
+[00:50.39] AGENT: I'll look up your information and check available appointments for next week.
+[00:51.13] CALLER (bot): Okay, thank you. My date of birth is June 14, 1987. I’d be happy to take whichever next-week slot works best.
+[00:56.90] AGENT: (gap: 2717ms) Go ahead and tell me your date of birth when you're ready.
+[00:57.95] CALLER (bot): Right, my date of birth is June 14, 1987. If you need anything else to book the routine check-up, just let me know—I'm flexible with next week.
+[01:10.46] AGENT: (gap: -49ms, MID-SPEECH INTERRUPT) Thanks, Maria.
+[01:14.21] AGENT: (gap: -7ms, MID-SPEECH INTERRUPT) I have your date of birth as June 14, 1987.
+[01:20.13] AGENT: Just confirming you'd like to book a general office visit for a routine checkup next week, is that correct?
+[01:21.03] CALLER (bot): Yes, that’s right. I’d like to book a general office visit for a routine check-up sometime next week. I don’t have a strong preference beyond that, so whatever you have available will work.
+[01:33.98] AGENT: (gap: -163ms, MID-SPEECH INTERRUPT) Let me check available appointment times for a routine check-up next week.
+[01:41.02] AGENT: (gap: -56ms, MID-SPEECH INTERRUPT) It looks like you already have a routine check-up appointment booked. If you'd like, I can help you reschedule or cancel that appointment.
+[01:44.69] AGENT: Would you like to make a change, or do you want to keep your current booking?
+[01:45.97] CALLER (bot): I’d like to keep the current booking, as long as it’s a routine check-up. If there’s any issue with it, or if you need anything from me, let me know. Thanks for your help.
+[01:59.50] AGENT: (gap: -57ms, MID-SPEECH INTERRUPT) Your current appointment for a routine checkup is set.
+[02:00.66] AGENT: There's nothing else
+[02:01.83] CALLER (bot): Great, thank you so much. I really appreciate your help getting that set up. I’ll keep my current appointment as is. Thanks again, and have a nice day. Goodbye!
+[02:07.01] AGENT: (gap: -98ms, MID-SPEECH INTERRUPT) Your current appointment for a routine checkup is set.
+[02:09.38] AGENT: (gap: -41ms, MID-SPEECH INTERRUPT) There's nothing else needed from you right now.
+[02:12.86] AGENT: If you have any other questions or need to make changes, just let me know.
+[02:14.36] CALLER (bot): Perfect, thank you for confirming. I don’t have any other questions right now. I’ll keep the current appointment. Thanks again for all the help. Goodbye!
+[02:27.34] AGENT: (gap: 9532ms) You're all set, Maria. Have a great day.
+[02:27.99] CALLER (bot): Thanks so much. I really appreciate it. I’ll take care of it and look forward to the appointment. Have a great day!
+[02:31.06] SYSTEM: Twilio sent stop event
+
+------------------------------------------------------------
+Turn-taking summary:
+  Turns measured: 13
+  Average gap: 851ms
+  Flagged: 0 short gap(s), 11 mid-speech interrupt(s)
+    [00:05.19] gap=-46ms MID-SPEECH INTERRUPT
+    [00:07.61] gap=-347ms MID-SPEECH INTERRUPT
+    [00:29.27] gap=-47ms MID-SPEECH INTERRUPT
+    [00:47.09] gap=-279ms MID-SPEECH INTERRUPT
+    [01:10.46] gap=-49ms MID-SPEECH INTERRUPT
+    [01:14.21] gap=-7ms MID-SPEECH INTERRUPT
+    [01:33.98] gap=-163ms MID-SPEECH INTERRUPT
+    [01:41.02] gap=-56ms MID-SPEECH INTERRUPT
+    [01:59.50] gap=-57ms MID-SPEECH INTERRUPT
+    [02:07.01] gap=-98ms MID-SPEECH INTERRUPT
+    [02:09.38] gap=-41ms MID-SPEECH INTERRUPT

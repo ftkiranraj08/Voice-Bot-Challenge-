@@ -1,0 +1,12 @@
+{
+  "call_label": "call-10_10_interruption_barge_in",
+  "scenario_id": "10_interruption_barge_in",
+  "scenario_name": "Interruption / barge-in test",
+  "probe": "Does the agent handle barge-in gracefully -- stop, listen, recover -- or does it talk over/ignore the interruption?",
+  "call_sid": "CAa5f72c85b47cf210cd662bec4974bed5",
+  "started_at": 1784567511.5759099,
+  "duration_sec": 159.0,
+  "call_status": "completed",
+  "recording_path": "/Users/kiran/Desktop/PrettyGoodAI/recordings/call-10_10_interruption_barge_in.mp3",
+  "recording_error": null
+}

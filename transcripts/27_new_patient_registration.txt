@@ -1,0 +1,31 @@
+Scenario: Register a brand-new patient with a distinct name/DOB/phone (27_new_patient_registration)
+Caller persona: Sofia Martinez
+Call SID: CA724fbd32a4b0b6055bdf2e52d59a6e78
+Started: 2026-07-20 16:12:32
+------------------------------------------------------------
+
+[00:00.00] SYSTEM: Call started (streamSid=MZ54d2863f60de95dd805b917b713dc0c3, callSid=CA724fbd32a4b0b6055bdf2e52d59a6e78)
+[00:04.85] AGENT: This call may be recorded for quality and training purposes.
+[00:07.58] AGENT: Para español, oprima el dos.
+[00:13.59] AGENT: Thanks for calling Pivot Point Orthopedics, part of Pretty Good AI. How may I help you today?
+[00:15.99] CALLER (bot): Hi, I’d like to register as a new patient, please. I haven’t been seen here before, so I’m hoping you can help me get set up. My name is Sofia Martinez. My date of birth is March 3, 1995, and my phone number is 415-555-0199. I’d also like to book a first appointment for a routine check-up if that’s possible. Thank you!
+[00:52.53] AGENT: (gap: 7153ms) Just to confirm, could you please spell your first and last name for me? I have your date of birth as March 3, 1995, is that correct?
+[00:54.02] CALLER (bot): Sure, my name is spelled S-O-F-I-A, and last name is M-A-R-T-I-N-E-Z. Yes, March 3, 1995 is correct. If you need anything else to complete the registration, I’m happy to give it.
+[01:27.38] AGENT: (gap: 5041ms) Would you like to use your phone number to look up your record? If so, please provide the number you would like us to use. If you are not sure, I can confirm your name and date of birth again. Which would you prefer?
+[01:28.32] CALLER (bot): Yes, please use my phone number to look up my record. It’s 415-555-0199. If you need it, my name is Sofia Martinez, and my date of birth is March 3, 1995.
+[01:48.55] AGENT: I have your phone number as 415.
+[01:56.20] AGENT: 555-0199 and your date of birth as March 3, 1995, is that correct?
+[01:58.61] CALLER (bot): Yes, that’s correct. My name is Sofia Martinez, date of birth March 3, 1995, and the phone number is 415-555-0199. I’d like to finish setting up as a new patient and then get a first appointment scheduled for a routine check-up.
+[02:26.26] AGENT: Thanks for confirming. I can't create a new patient account for you directly, but I'll connect you to our patient support team so they can help you get registered and schedule your first appointment. Please stay on the line.
+[02:29.28] AGENT: Connecting you to a representative. Please wait.
+[02:29.71] CALLER (bot): Okay, thanks for transferring me. I’ll hold here and wait for the representative.
+[02:34.35] AGENT: (gap: -3963ms, MID-SPEECH INTERRUPT) Hello, you've reached the Pretty Good AI test line. Goodbye.
+[02:35.45] CALLER (bot): Hello? Wait, did someone hang up on me? I’m still here. I thought I’d be connected to support, but if this is the test line ending, I guess I’ll just say thanks and goodbye.
+[02:50.44] SYSTEM: Twilio sent stop event
+
+------------------------------------------------------------
+Turn-taking summary:
+  Turns measured: 3
+  Average gap: 2744ms
+  Flagged: 0 short gap(s), 1 mid-speech interrupt(s)
+    [02:34.35] gap=-3963ms MID-SPEECH INTERRUPT

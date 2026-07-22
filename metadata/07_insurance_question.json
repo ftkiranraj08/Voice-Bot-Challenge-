@@ -1,0 +1,12 @@
+{
+  "call_label": "07_insurance_question",
+  "scenario_id": "07_insurance_question",
+  "scenario_name": "Insurance question",
+  "probe": "Does the agent give a real answer or an evasive non-answer / wrong info about insurance handling?",
+  "call_sid": "CAc7255b56adcb805c3932eb61bbb9ee9f",
+  "started_at": 1784581245.553151,
+  "duration_sec": 152.5,
+  "call_status": "completed",
+  "recording_path": "/Users/kiran/Desktop/PrettyGoodAI/recordings/07_insurance_question.mp3",
+  "recording_error": null
+}

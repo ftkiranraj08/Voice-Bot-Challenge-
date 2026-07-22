@@ -5,6 +5,7 @@ file (the bridge server already wrote the transcript + base metadata).
 Usage:
   python run_calls.py                 # run every scenario in config/scenarios.py
   python run_calls.py --single 01_new_appointment   # run just one scenario (for iterating)
+  python run_calls.py --from 03_cancel_appointment  # run this scenario through the end of the list
   python run_calls.py --list          # print scenario ids and exit
 """
 
@@ -53,16 +54,29 @@ def run_one_call(client, scenario, call_label):
     print(f"  call status: {status}")
 
     recording_path = None
-    recording = twilio_client.wait_for_recording(client, call_sid)
-    if recording:
-        os.makedirs(RECORDINGS_DIR, exist_ok=True)
-        recording_path = os.path.join(RECORDINGS_DIR, f"{call_label}.mp3")
-        twilio_client.download_recording(recording, recording_path)
-        print(f"  saved recording -> {recording_path}")
-    else:
-        print("  WARNING: no recording found within timeout")
+    recording_error = None
+    try:
+        recording = twilio_client.wait_for_recording(client, call_sid)
+        if recording:
+            os.makedirs(RECORDINGS_DIR, exist_ok=True)
+            candidate_path = os.path.join(RECORDINGS_DIR, f"{call_label}.mp3")
+            twilio_client.download_recording(recording, candidate_path)
+            recording_path = candidate_path
+            print(f"  saved recording -> {recording_path}")
+        else:
+            recording_error = "no recording found within timeout"
+            print(f"  WARNING: {recording_error}")
+    except Exception as exc:
+        # A flaky recording download shouldn't take down the rest of the
+        # batch -- log it, leave recording_path unset, and move on. The
+        # transcript for this call is unaffected either way.
+        recording_error = str(exc)
+        print(f"  WARNING: recording download failed: {recording_error}")
 
-    _merge_metadata(call_label, {"call_status": status, "recording_path": recording_path})
+    _merge_metadata(
+        call_label,
+        {"call_status": status, "recording_path": recording_path, "recording_error": recording_error},
+    )
 
 
 def _merge_metadata(call_label, extra):
@@ -80,6 +94,7 @@ def _merge_metadata(call_label, extra):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--single", help="run only this scenario id")
+    parser.add_argument("--from", dest="from_id", help="run this scenario id through the end of the list")
     parser.add_argument("--list", action="store_true", help="list scenario ids and exit")
     args = parser.parse_args()
 
@@ -96,13 +111,20 @@ def main():
         run_one_call(client, scenario, scenario["id"])
         return
 
-    for idx, scenario in enumerate(SCENARIOS, start=1):
+    numbered_scenarios = list(enumerate(SCENARIOS, start=1))
+    if args.from_id:
+        start_idx = next((i for i, s in enumerate(SCENARIOS) if s["id"] == args.from_id), None)
+        if start_idx is None:
+            sys.exit(f"Unknown scenario id: {args.from_id}")
+        numbered_scenarios = numbered_scenarios[start_idx:]
+
+    for idx, scenario in numbered_scenarios:
         call_label = f"call-{idx:02d}_{scenario['id']}"
         run_one_call(client, scenario, call_label)
-        if idx < len(SCENARIOS):
+        if (idx, scenario) != numbered_scenarios[-1]:
             time.sleep(DELAY_BETWEEN_CALLS_SEC)
 
-    print(f"\nDone. {len(SCENARIOS)} calls placed. See transcripts/, recordings/, metadata/.")
+    print(f"\nDone. {len(numbered_scenarios)} calls placed. See transcripts/, recordings/, metadata/.")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,37 @@
+Scenario: Attempt to book an appointment on a date that has already passed (31_past_date_scheduling)
+Caller persona: Maria Chen
+Call SID: CA2eb2d5fb50c0f35fd7692271eb6e6808
+Started: 2026-07-20 17:06:13
+------------------------------------------------------------
+
+[00:00.00] SYSTEM: Call started (streamSid=MZde055fc120f36370a3b56c820645492f, callSid=CA2eb2d5fb50c0f35fd7692271eb6e6808)
+[00:04.48] AGENT: This call may be recorded for quality and training purposes.
+[00:06.99] AGENT: Para español, oprima el dos.
+[00:09.80] AGENT: Thanks for calling Pivot Point Orthopedics.
+[00:12.84] AGENT: Part of Breguet AI. How may I help you today?
+[00:14.43] CALLER (bot): Hi there, thanks for the warm greeting—let me explain what I’m looking to set up.Hi, this is Maria Chen. I’d like to book a routine check-up for March 3rd, 2020.
+[00:29.28] AGENT: (gap: 3844ms) Please provide your date of birth.
+[00:29.71] CALLER (bot): My date of “birth” is July 4th, 2000.
+[00:41.48] AGENT: You'd like to book a routine checkup.
+[00:48.68] AGENT: Just to confirm, is this for a general office visit, or is there something specific you'd like the provider to focus on?
+[00:49.19] CALLER (bot): Yes, it’s just a general routine office visit. I’d just like a check-up, nothing specific.
+[01:03.81] AGENT: (gap: 4194ms) Do you have a preferred provider for your check-up or would you like to see the first available?
+[01:04.50] CALLER (bot): Actually, I’m fine seeing the first available provider. A routine check-up is what I’m looking for, so whoever’s open is fine.
+[01:21.70] AGENT: (gap: 3443ms) Let me check for available appointments around March 3rd for a routine checkup with any provider. One moment.
+[01:22.57] CALLER (bot): Okay, thanks for checking. I’m fine with that—just a routine check-up around March 3rd. Let me know what’s available, or if you need anything else from me.
+[01:23.52] AGENT: (gap: -6817ms, MID-SPEECH INTERRUPT) 今日は。
+[01:24.72] CALLER (bot): Alright, I’ll pause for a moment while you finish checking that.Thanks for checking. I’ll wait here. If you find something, I’m ready to book.
+[01:33.72] AGENT: It appears you already have a routine checkup appointment booked.
+[01:37.15] AGENT: If you'd like, I can help you reschedule or cancel that appointment.
+[01:41.43] AGENT: Would you like to make a change, or do you want to keep your current booking?
+[01:42.36] CALLER (bot): No, that’s fine—I’ll keep the booking. Thanks for letting me know.
+[01:53.95] AGENT: (gap: 3098ms) You're all set then. If you need anything else, just let us know. Have a great day.
+[01:54.28] CALLER (bot): Perfect, thank you so much, I really appreciate it. Have a great day too.
+[03:00.56] SYSTEM: Hit max_duration_sec watchdog (180s)
+
+------------------------------------------------------------
+Turn-taking summary:
+  Turns measured: 5
+  Average gap: 1552ms
+  Flagged: 0 short gap(s), 1 mid-speech interrupt(s)
+    [01:23.52] gap=-6817ms MID-SPEECH INTERRUPT

@@ -1,0 +1,30 @@
+Scenario: Insurance question (07_insurance_question)
+Caller persona: Maria Chen
+Call SID: CAc7255b56adcb805c3932eb61bbb9ee9f
+Started: 2026-07-20 17:00:45
+------------------------------------------------------------
+
+[00:00.00] SYSTEM: Call started (streamSid=MZcbe7a1f4371c8f6e9cad1aa71c356751, callSid=CAc7255b56adcb805c3932eb61bbb9ee9f)
+[00:04.45] AGENT: This call may be recorded for quality and training purposes.
+[00:07.02] AGENT: Para español, oprima el dos.
+[00:13.66] AGENT: Thanks for calling Pivot Point Orthopedics, part of PrettyGood AI. How may I help you today?
+[00:14.90] CALLER (bot): Hi, I’m Maria Chen. I wanted to ask if you accept Blue Cross Blue Shield PPO. If you don’t take it, what should I do next—would I need to find a different provider, or ask about self-pay options?
+[00:20.54] AGENT: (gap: -8403ms, MID-SPEECH INTERRUPT) Please provide your date of birth.
+[00:21.06] CALLER (bot): My date of birth is July 4th, 2000.
+[00:29.40] AGENT: (gap: 3047ms) How can I help you today?
+[00:31.04] CALLER (bot): I’m calling to ask whether you accept Blue Cross Blue Shield PPO. If you don’t accept that insurance, could you tell me what the next best option would be? For example, do I need to look for a different provider, or are there alternatives through the clinic?
+[01:03.76] AGENT: (gap: 11426ms) Could you share your Blue Cross Blue Shield PPO member ID number? This will help me check if your plan is accepted.
+[01:05.78] CALLER (bot): I don’t have a Blue Cross Blue Shield PPO member ID to share right now. I can give my date of birth, which is July 4th, 2000, and my phone number, which is 213-238-6567 if that’s helpful. But I don’t have an insurance member ID available to give. I can wait to hear what you need next.
+[01:45.34] AGENT: (gap: 3862ms) To check if your Blue Cross Blue Shield PPO plan is accepted, I'll need either your member ID or more details from your insurance card. If you don't have the card handy, I can send you a secure link by text so you can upload your insurance info later. Let me send that to your phone now.
+[01:46.15] CALLER (bot): I understand, but I don’t have an insurance card with me, and I don’t have a member ID or the secure link to upload anything. If you don’t need that to get me scheduled, that’s fine. But if you do, I’d need to get the details
+[01:57.98] AGENT: (gap: -10658ms, MID-SPEECH INTERRUPT) There is no insurance on file for you right now. Would you like to get a text message with a link to upload photos of your insurance card to your number ending 6567?
+[02:01.30] CALLER (bot): Thanks for explaining that. Let me think about how best to handle this.Thanks for the heads up. I don’t have access to a text link or the ability to upload photos right now. So I can’t do that unless someone reads it off or sends it another way. If you need insurance info to move forward, I can help you explain what you do have—my date of birth, which is July 4th, 2000, and the phone number 213-238-6567—and then we can figure out the best next step from there.
+[02:30.47] SYSTEM: Hit max_duration_sec watchdog (150s)
+
+------------------------------------------------------------
+Turn-taking summary:
+  Turns measured: 5
+  Average gap: -145ms
+  Flagged: 0 short gap(s), 2 mid-speech interrupt(s)
+    [00:20.54] gap=-8403ms MID-SPEECH INTERRUPT
+    [01:57.98] gap=-10658ms MID-SPEECH INTERRUPT

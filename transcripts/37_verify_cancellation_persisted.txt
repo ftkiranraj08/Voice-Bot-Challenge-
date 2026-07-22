@@ -1,0 +1,27 @@
+Scenario: Verify whether a previous cancellation actually persisted (run after 03_cancel_appointment) (37_verify_cancellation_persisted)
+Caller persona: Maria Chen
+Call SID: CA523083e2e23d757326c02841ebc5e672
+Started: 2026-07-21 10:57:25
+------------------------------------------------------------
+
+[00:00.00] SYSTEM: Call started (streamSid=MZd81e6404e4d79abb3cc8f77cbe87a961, callSid=CA523083e2e23d757326c02841ebc5e672)
+[00:04.95] AGENT: This call may be recorded for quality and training purposes.
+[00:07.39] AGENT: Para español, oprima el dos.
+[00:14.17] AGENT: Thanks for calling Pivot Point Orthopedics, part of Pretty Good AI. How may I help you today?
+[00:15.81] CALLER (bot): Hi, this is Maria Chen. I’m calling to check on my upcoming appointments. I previously cancelled an appointment, and I’d like to confirm whether that cancellation actually took effect. Can you tell me when my next appointment is?
+[00:24.59] AGENT: (gap: -7091ms, MID-SPEECH INTERRUPT) Please provide your date of birth.
+[00:24.91] CALLER (bot): My date of birth is July 4th, 2000.
+[00:42.67] AGENT: (gap: 8384ms) You do not have any upcoming appointments scheduled. Would you like to book a new appointment?
+[00:44.47] CALLER (bot): Thanks for checking. I see there aren’t any upcoming appointments scheduled, so it looks like the cancellation has held. I don’t need to book anything right now—just confirming that there’s no active appointment on my side.
+[01:06.09] AGENT: (gap: 2767ms) That's correct, Maria. There are no active appointments for you at this time. If you need to schedule in the future, just let me know.
+[01:06.99] CALLER (bot): Got it, thanks. It’s good to know there’s no active appointment right now. I’ll reach out again if I need to set something up. Goodbye.
+[01:21.25] AGENT: (gap: 2980ms) Take care, Maria. Have a great day.
+[01:21.78] CALLER (bot): Thanks, I appreciate it. I’ll hold off for now. Take care too, and have a great day.
+[02:00.46] SYSTEM: Hit max_duration_sec watchdog (120s)
+
+------------------------------------------------------------
+Turn-taking summary:
+  Turns measured: 4
+  Average gap: 1760ms
+  Flagged: 0 short gap(s), 1 mid-speech interrupt(s)
+    [00:24.59] gap=-7091ms MID-SPEECH INTERRUPT

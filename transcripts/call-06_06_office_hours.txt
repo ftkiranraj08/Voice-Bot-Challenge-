@@ -1,0 +1,28 @@
+Scenario: Office hours question (06_office_hours)
+Caller persona: Robert Kim
+Call SID: CA0458f4446c8675c2436507db18972632
+Started: 2026-07-20 12:51:04
+------------------------------------------------------------
+
+[00:00.00] SYSTEM: Call started (streamSid=MZdf890b53852b62f398c82dc9331d4595, callSid=CA0458f4446c8675c2436507db18972632)
+[00:04.53] AGENT: This call may be recorded for quality and training purposes.
+[00:06.90] CALLER (bot): Hi, this
+[00:06.99] AGENT: Para español, oprima el dos.
+[00:13.47] AGENT: Thanks for calling Pivot Point Orthopedics, part of Pretty Good AI. How may I help you today?
+[00:14.29] CALLER (bot): Hi, Robert Kim here. I just wanted to ask what your office hours are, and whether you’re open on weekends. That’s all I need today.
+[00:23.12] AGENT: I see you're calling from the number we have on file.
+[00:24.74] AGENT: Am I speaking with Maria?
+[00:25.96] CALLER (bot): No, this is Robert Kim. I’m calling the clinic and I was just asking about your office hours and weekend availability.
+[00:37.12] AGENT: (gap: 150ms) Could you please provide your full date of birth?
+[00:38.35] CALLER (bot): I’m not comfortable sharing my full date of birth. I’m just trying to find out your office hours and whether you’re open on weekends. If you need another piece of information, let me know, and I’ll be happy to provide it.
+[01:02.86] AGENT: (gap: 2422ms) No problem. Avit Point Orthopedics is open Monday through Friday; we are not open on weekends. If you need more details about our weekday hours or services, just let me know.
+[01:04.23] CALLER (bot): Got it, thanks. So you’re open Monday through Friday, and closed on weekends. That’s perfect. Thanks for confirming that, and I’ll let you get back to it. Have a good day.
+[01:18.88] AGENT: (gap: 2708ms) You too. Take care.
+[01:19.24] CALLER (bot): Thanks so much. Have a great day, and goodbye!
+[01:22.71] SYSTEM: Twilio sent stop event
+
+------------------------------------------------------------
+Turn-taking summary:
+  Turns measured: 3
+  Average gap: 1760ms
+  Flagged: 0 short gap(s), 0 mid-speech interrupt(s)

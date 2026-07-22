@@ -1,0 +1,31 @@
+Scenario: General medication question (not a refill) (13_general_medication_question)
+Caller persona: Maria Chen
+Call SID: CAe11a87e183184f685055bdbec787684a
+Started: 2026-07-20 15:21:51
+------------------------------------------------------------
+
+[00:00.00] SYSTEM: Call started (streamSid=MZd82be961c3a38d31c6459c396daf7074, callSid=CAe11a87e183184f685055bdbec787684a)
+[00:04.58] AGENT: This call may be recorded for quality and training purposes.
+[00:07.01] CALLER (bot): Hi,
+[00:07.11] AGENT: Para español, oprima el dos.
+[00:13.09] AGENT: Thanks for calling Pivot Point Orthopedics, part of Pretty Good AI. How may I help you today?
+[00:14.73] CALLER (bot): Hi, this is Maria Chen. I was prescribed a medication a while back, and I just had a general question. Is it okay to take it with ibuprofen? I’m a little worried about interactions, so I’d really appreciate any guidance.
+[00:28.84] AGENT: (gap: -2241ms, MID-SPEECH INTERRUPT) Please provide your date of birth.
+[00:29.10] CALLER (bot): My date of birth is July 4th, 2000.
+[00:38.42] AGENT: Let me get that information for you.
+[00:41.06] AGENT: One moment while I check with the medical team.
+[00:42.56] CALLER (bot): Sure, take your time.Okay, thanks. I’ll wait here. I just want to make sure I’m taking everything safely, so I really appreciate you checking with the medical team.
+[01:06.56] AGENT: I've documented your question for our clinic support team. They will review your case and get back to you as soon as possible with guidance about taking your medication with ibuprofen.
+[01:09.31] AGENT: Is there anything else I can help you with today?
+[01:10.58] CALLER (bot): That’s everything for now, thank you. I’ll wait for the clinic’s guidance about the medication with ibuprofen. I really appreciate you helping me with that. Goodbye!
+[01:21.58] AGENT: You're welcome.
+[01:23.62] AGENT: Have a nice day. Goodbye.
+[01:24.02] CALLER (bot): Thank you again. Take care and have a good day. Goodbye!
+[01:27.31] SYSTEM: Twilio sent stop event
+
+------------------------------------------------------------
+Turn-taking summary:
+  Turns measured: 1
+  Average gap: -2241ms
+  Flagged: 0 short gap(s), 1 mid-speech interrupt(s)
+    [00:28.84] gap=-2241ms MID-SPEECH INTERRUPT

@@ -1,0 +1,38 @@
+Scenario: Ask for services/doctor list, then book a mismatched service (26_wrong_service_for_doctor)
+Caller persona: Maria Chen
+Call SID: CA40607a31e39c99a5e18b35cdb4def3d7
+Started: 2026-07-20 15:57:07
+------------------------------------------------------------
+
+[00:00.00] SYSTEM: Call started (streamSid=MZ8a1010a30960a4e57b70d96ad86c0a75, callSid=CA40607a31e39c99a5e18b35cdb4def3d7)
+[00:04.88] AGENT: This call may be recorded for quality and training purposes.
+[00:07.29] AGENT: Para español, oprima el dos.
+[00:13.37] AGENT: Thanks for calling Pivot Point Orthopedics, part of Pretty Good AI. How may I help you today?
+[00:15.16] CALLER (bot): Hi, thanks. I’m calling to find out what medical services you offer and, if possible, the names of the doctors who work there. Once I know a doctor’s name, I’d like to book an appointment with them for something that wouldn’t usually be treated at an orthopedic clinic—specifically, a bad tooth pain.
+[01:02.33] AGENT: (gap: 2952ms) Pivot Point Orthopedics specializes in joint, muscle, and bone care, things like sports injuries, chronic pain, and physical therapy. We don't treat dental or tooth pain here. Our providers are Dr. Doogie Howser, Dr. Doug Ross, Dr. Adam Bricker, and physical therapists Lynn Anderson and Carl Mentz. If you need help with an orthopedic issue, I can help you book an appointment. For tooth pain, you'll want to contact a dental clinic.
+[01:05.07] CALLER (bot): Okay, thanks. I hear you don’t treat dental or tooth pain there, but I’d like to try anyway. Could I book an appointment with Dr. Doug Hauser for my tooth pain? I get that it’s not typical orthopedic, but I just need to be sure it gets handled somehow. If you can’t, that’s fine, but I wanted to ask directly.
+[01:20.44] AGENT: (gap: -5679ms, MID-SPEECH INTERRUPT) I see you're calling from the number we have on file. Am I speaking with Maria?
+[01:20.66] CALLER (bot): Yes, this is Maria Chen. That’s correct.
+[01:27.83] AGENT: (gap: -243ms, MID-SPEECH INTERRUPT) Please provide your date of birth.
+[01:28.14] CALLER (bot): My date of birth is July 4th, 2000.
+[01:45.06] AGENT: (gap: 3542ms) Thanks Maria. Just to confirm, you'd like to book an appointment with Dr. Doug Houser for tooth pain, even though we don't treat dental issues here?
+[01:46.39] CALLER (bot): Yes, that’s correct. I’d really like to book an appointment with Dr. Doug Hauser for this tooth pain. I understand it’s outside your usual scope, but I’d like to see if there’s any way to handle it or get guidance. If it can’t happen, I understand, but I want to try.
+[02:02.71] AGENT: (gap: -6901ms, MID-SPEECH INTERRUPT) Since tooth pain isn't typically treated at our clinic, I'll need to connect you with a live agent who can assist further. Please hold while I transfer your call.
+[02:03.39] CALLER (bot): Okay, thanks.Alright, thanks for letting me know. I can hold. Please transfer me to a live agent, and I’ll wait on the line.
+[02:11.35] AGENT: (gap: -2173ms, MID-SPEECH INTERRUPT) Connecting you to a representative.
+[02:12.67] AGENT: Please wait.
+[02:13.05] CALLER (bot): Okay, I’m here and waiting. If someone comes back on, I’ll be ready. Thanks again.
+[02:17.75] AGENT: (gap: -4335ms, MID-SPEECH INTERRUPT) Hello, you've reached the Pretty Good AI test line. Goodbye.
+[02:18.39] CALLER (bot): Thanks for the call. I appreciate the time, even though it didn’t work out for the tooth pain. Take care, and goodbye.
+[02:30.12] SYSTEM: Twilio sent stop event
+
+------------------------------------------------------------
+Turn-taking summary:
+  Turns measured: 7
+  Average gap: -1834ms
+  Flagged: 0 short gap(s), 5 mid-speech interrupt(s)
+    [01:20.44] gap=-5679ms MID-SPEECH INTERRUPT
+    [01:27.83] gap=-243ms MID-SPEECH INTERRUPT
+    [02:02.71] gap=-6901ms MID-SPEECH INTERRUPT
+    [02:11.35] gap=-2173ms MID-SPEECH INTERRUPT
+    [02:17.75] gap=-4335ms MID-SPEECH INTERRUPT

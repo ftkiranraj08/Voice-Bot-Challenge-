@@ -1,0 +1,35 @@
+Scenario: Attempt to book an appointment on a date that has already passed (31_past_date_scheduling)
+Caller persona: Maria Chen
+Call SID: CAe3d8c08df7bb5bb434b21a52e98272ca
+Started: 2026-07-21 19:28:41
+------------------------------------------------------------
+
+[00:00.00] SYSTEM: Call started (streamSid=MZ2b20935816ca3d81324ced9a64ce8df3, callSid=CAe3d8c08df7bb5bb434b21a52e98272ca)
+[00:04.51] AGENT: This call may be recorded for quality and training purposes.
+[00:07.01] AGENT: Para español, oprima el dos.
+[00:13.02] AGENT: Thanks for calling Pivot Point Orthopedics, part of Pretty Good AI. How may I help you today?
+[00:14.27] CALLER (bot): Hi, this is Maria Chen. I’m calling to book a routine check-up appointment for March 3rd, 2025. I need to know whether that specific date is available.
+[00:29.31] AGENT: (gap: 3251ms) Maria, can you please provide your date of birth?
+[00:29.50] CALLER (bot): My date of birth is July 4, 2000.
+[00:44.44] AGENT: (gap: 3907ms) Thanks, Maria. Just to confirm, you'd like to book a general office visit for a routine check-up?
+[00:45.09] CALLER (bot): Yes, that’s correct. And just to be clear, I’m asking about March 3rd, 2025 specifically. Can you tell me if that date is available or not?
+[01:14.32] AGENT: (gap: 9266ms) I checked for March 3, 2025, but there are no available appointments on that date. Would you like to look at the soonest openings I found, or do you have another specific date in mind?
+[01:16.20] CALLER (bot): No, there are no openings on March 3rd, 2025. That’s clear.
+
+Okay, thanks for checking. If that date isn’t available, I’d like to look at opening next week. That should work, I just want to get something scheduled as soon as possible.
+[01:43.02] AGENT: (gap: 4476ms) Next week we have openings on Tuesday, July 28. Would you prefer a morning or afternoon appointment? I can share a few specific times
+[01:43.66] CALLER (bot): A morning time sounds good. Can you share what morning slots are open on Tuesday July 28th? I’ll pick one from those.
+[02:14.53] AGENT: Here are the morning openings for Tuesday, July 28: 9:00 AM with Dr. Zbigniew Lukaszewski; 9:30 AM with Dr. Zbigniew Lukaszewski; 10:00 AM with Dr. Zbigniew Lukaszewski, or Dr. Kelly Noble.
+[02:16.50] AGENT: Would you like to book one of these times?
+[02:17.54] CALLER (bot): Yes, I’d like to book one of those morning slots. I’ll take whichever opening is available first—so the 9:00 AM with Dr. Zdenek Lukowski, unless anything changes. That should be fine.
+[02:29.33] AGENT: (gap: -8751ms, MID-SPEECH INTERRUPT) Which time would you like to book? 9, 9:30, or 10 a.m.? And do you have a preference between Dr. Lukofsky or Dr. Noble for 10 a.m.?
+[02:30.31] CALLER (bot): I’d like the 9:00 AM option with Dr. Zdenek Lukowski, please. That’s fine, and I don’t have a special preference for a different doctor for the 10:00 slot. Just book me for 9:00 with Dr. Lukowski.
+[02:53.68] AGENT: You're all set for Tuesday, July 28 at 9AM with Dr. Zbigniew Lukawski at Pivot Point Orthopedics.
+[03:00.89] SYSTEM: Hit max_duration_sec watchdog (180s)
+
+------------------------------------------------------------
+Turn-taking summary:
+  Turns measured: 5
+  Average gap: 2430ms
+  Flagged: 0 short gap(s), 1 mid-speech interrupt(s)
+    [02:29.33] gap=-8751ms MID-SPEECH INTERRUPT

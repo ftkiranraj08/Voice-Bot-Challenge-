@@ -1,0 +1,25 @@
+Scenario: Refill request for a medication not on file (05_refill_not_on_file)
+Caller persona: Maria Chen
+Call SID: CA0f009b32f667289aa674c8f28e8f7137
+Started: 2026-07-20 16:55:02
+------------------------------------------------------------
+
+[00:00.00] SYSTEM: Call started (streamSid=MZf95057bd19da020c0cc3a4baaab2cdcc, callSid=CA0f009b32f667289aa674c8f28e8f7137)
+[00:04.67] AGENT: This call may be recorded for quality and training purposes.
+[00:07.09] AGENT: Para español, oprima el dos.
+[00:13.77] AGENT: Thanks for calling Pivot Point Orthopedics, part of Pretty Good AI. How may I help you today?
+[00:14.91] CALLER (bot): Hi, this is Maria Chen. I’m a bit puzzled, but I’m calling to request a refill of sertraline 100 milligrams. I’m not sure you guys have ever prescribed it to me before, but I’m hoping you can check.
+[00:31.11] AGENT: (gap: 2884ms) Please provide your date of birth.
+[00:31.38] CALLER (bot): July 4th, 2000.
+[00:45.55] AGENT: (gap: 3338ms) I don't see any medications on your chart that we can refill right now. If you'd like to speak with our support team about this, just let me know.
+[00:47.91] CALLER (bot): Oh, okay. I hear you. I’m a bit surprised because I really do want to refill sertraline 100 milligrams, but it’s not showing on your chart. If there’s no history of it being prescribed, I understand. What are my options here, just moving forward? Could I speak with your support team to see what they recommend, like whether it has to be prescribed by another doctor, or if you need to see someone first?
+[01:15.61] AGENT: Connecting you to a representative. Please wait.
+[01:19.96] AGENT: Hello, you've reached the Pretty Good AI test line. Goodbye.
+[01:20.23] CALLER (bot): Oh, okay. Thanks for your help, I think I’ll take it from here. Goodbye.
+[01:28.90] SYSTEM: Twilio sent stop event
+
+------------------------------------------------------------
+Turn-taking summary:
+  Turns measured: 2
+  Average gap: 3111ms
+  Flagged: 0 short gap(s), 0 mid-speech interrupt(s)

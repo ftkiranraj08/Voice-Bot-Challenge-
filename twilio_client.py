@@ -43,31 +43,40 @@ def wait_for_completion(client, call_sid, poll_interval_sec=5, overall_timeout_s
     return "timeout"
 
 
-RECORDING_FAILURE_STATUSES = {"failed", "absent"}
-
-
 def wait_for_recording(client, call_sid, poll_interval_sec=3, timeout_sec=90):
-    # Twilio lists the recording resource (status "processing") right after
-    # the call ends, well before the .mp3 is actually fetchable -- downloading
-    # then 404s. Wait for status "completed" specifically.
+    """Poll until a recording exists AND Twilio marks it "completed".
+
+    A recording resource shows up in the list as soon as it starts, but its
+    media isn't guaranteed fetchable until post-call processing finishes and
+    status flips to "completed" -- fetching the .mp3 before then 404s.
+    """
     deadline = time.monotonic() + timeout_sec
+    last_seen = None
     while time.monotonic() < deadline:
         recordings = client.recordings.list(call_sid=call_sid, limit=1)
         if recordings:
-            recording = recordings[0]
-            if recording.status == "completed":
-                return recording
-            if recording.status in RECORDING_FAILURE_STATUSES:
-                return None
+            last_seen = recordings[0]
+            if last_seen.status == "completed":
+                return last_seen
         time.sleep(poll_interval_sec)
-    return None
+    # Timed out waiting for "completed" -- hand back whatever we last saw
+    # (if anything) so the caller can still try, rather than giving up outright.
+    return last_seen
 
 
-def download_recording(recording, dest_path):
+def download_recording(recording, dest_path, max_attempts=4, retry_delay_sec=5):
     account_sid = os.environ["TWILIO_ACCOUNT_SID"]
     auth_token = os.environ["TWILIO_AUTH_TOKEN"]
     url = f"https://api.twilio.com/2010-04-01/Accounts/{account_sid}/Recordings/{recording.sid}.mp3"
-    resp = requests.get(url, auth=(account_sid, auth_token), timeout=30)
-    resp.raise_for_status()
-    with open(dest_path, "wb") as f:
-        f.write(resp.content)
+
+    for attempt in range(1, max_attempts + 1):
+        try:
+            resp = requests.get(url, auth=(account_sid, auth_token), timeout=30)
+            resp.raise_for_status()
+            with open(dest_path, "wb") as f:
+                f.write(resp.content)
+            return
+        except requests.exceptions.HTTPError:
+            if attempt == max_attempts:
+                raise
+            time.sleep(retry_delay_sec)

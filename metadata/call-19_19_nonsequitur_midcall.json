@@ -1,0 +1,12 @@
+{
+  "call_label": "call-19_19_nonsequitur_midcall",
+  "scenario_id": "19_nonsequitur_midcall",
+  "scenario_name": "Off-topic tangent mid-scheduling",
+  "probe": "Does the agent handle the off-topic aside gracefully and correctly resume the original scheduling context, or lose track of where the conversation was?",
+  "call_sid": "CA9a083c1a0f9bc76a7bfaedc0e6ae25ec",
+  "started_at": 1784569129.564972,
+  "duration_sec": 182.4,
+  "call_status": "completed",
+  "recording_path": "/Users/kiran/Desktop/PrettyGoodAI/recordings/call-19_19_nonsequitur_midcall.mp3",
+  "recording_error": null
+}

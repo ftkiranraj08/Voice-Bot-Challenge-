@@ -1,0 +1,12 @@
+{
+  "call_label": "call-09_09_ambiguous_request",
+  "scenario_id": "09_ambiguous_request",
+  "scenario_name": "Ambiguous request needing clarification",
+  "probe": "Does the agent ask good clarifying questions instead of guessing or booking blind?",
+  "call_sid": "CA6bb187819caf69203dbd81a6829e5f0f",
+  "started_at": 1784567323.4205031,
+  "duration_sec": 172.1,
+  "call_status": "completed",
+  "recording_path": "/Users/kiran/Desktop/PrettyGoodAI/recordings/call-09_09_ambiguous_request.mp3",
+  "recording_error": null
+}

@@ -35,11 +35,18 @@ METADATA_DIR = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__fi
 # caller bot to speak first rather than sitting in silence for the whole call.
 OPENING_GRACE_SEC = 5.0
 
-# After Twilio ends the media stream, give the OpenAI side this long to finish
-# delivering any trailing events already in flight (e.g. a transcription for
-# the agent's last utterance) before tearing the connection down, so the end
-# of the call doesn't get silently dropped from the transcript.
-TRAILING_EVENTS_GRACE_SEC = 2.5
+# If neither side has actively spoken for this long (as opposed to a normal
+# "let me check that" pause, the longest of which observed so far is ~30s),
+# treat the call as naturally concluded and end it rather than idling all
+# the way out to max_duration_sec -- a real call was seen sitting in dead
+# air for 90+ seconds after both sides had already said goodbye.
+INACTIVITY_TIMEOUT_SEC = 45.0
+
+# Expected/harmless realtime API error codes that shouldn't clutter the
+# transcript. response_cancel_not_active fires every time we call
+# cancel_response() on a speech_started that isn't actually interrupting an
+# in-flight bot response (i.e. most agent turns) -- by design, not a bug.
+HARMLESS_ERROR_CODES = {"response_cancel_not_active"}
 
 
 @app.api_route("/twiml", methods=["GET", "POST"])
@@ -70,6 +77,8 @@ async def media_stream(websocket: WebSocket):
     transcript = None
     realtime = None
     heard_any_audio = asyncio.Event()
+    activity = asyncio.Event()
+    activity.set()  # grace period before the first real exchange happens
 
     try:
         # First frames: "connected" then "start" carry the info we need.
@@ -91,7 +100,6 @@ async def media_stream(websocket: WebSocket):
         # Captured on speech_started, consumed on the next AGENT transcript line.
         pending_gap_ms = None
         pending_gap_is_interrupt = False
-        pending_gap_ms_audio = None
 
         async def opening_watchdog():
             try:
@@ -99,6 +107,18 @@ async def media_stream(websocket: WebSocket):
             except asyncio.TimeoutError:
                 transcript.add_event_marker("No audio heard from agent -- nudging caller bot to open")
                 await realtime.trigger_response()
+
+        async def inactivity_watchdog():
+            while True:
+                try:
+                    await asyncio.wait_for(activity.wait(), timeout=INACTIVITY_TIMEOUT_SEC)
+                    activity.clear()
+                except asyncio.TimeoutError:
+                    transcript.add_event_marker(
+                        f"No activity from either side for {INACTIVITY_TIMEOUT_SEC}s -- "
+                        "treating the call as concluded"
+                    )
+                    return
 
         async def twilio_to_openai():
             async for raw in websocket.iter_text():
@@ -112,75 +132,63 @@ async def media_stream(websocket: WebSocket):
                     break
 
         async def openai_to_twilio():
-            nonlocal pending_gap_ms, pending_gap_is_interrupt, pending_gap_ms_audio
+            nonlocal pending_gap_ms, pending_gap_is_interrupt
             async for event in realtime.events():
                 etype = event.get("type")
 
                 if etype == "response.output_audio.delta":
-                    # Skip 'commentary' (reasoning) items entirely -- only
-                    # the model's final_answer should ever reach the call.
-                    if not realtime.is_commentary(event):
-                        await websocket.send_text(
-                            json.dumps(
-                                {
-                                    "event": "media",
-                                    "streamSid": stream_sid,
-                                    "media": {"payload": event["delta"]},
-                                }
-                            )
+                    await websocket.send_text(
+                        json.dumps(
+                            {
+                                "event": "media",
+                                "streamSid": stream_sid,
+                                "media": {"payload": event["delta"]},
+                            }
                         )
+                    )
 
                 elif etype == "input_audio_buffer.speech_started":
-                    # Barge-in: the healthcare agent started talking. Only
-                    # flush Twilio's playback buffer and cancel the model's
-                    # response if our bot is actually mid-response with
-                    # audible output right now -- clear() used to fire
-                    # unconditionally on every speech_started regardless of
-                    # response state, which meant it would also clip the
-                    # tail of an already-COMPLETED utterance any time the
-                    # agent replied before Twilio finished physically
-                    # playing out the last buffered bytes. That's what was
-                    # producing the widespread audio/transcript mismatch
-                    # (iteration.md Issue 9) -- the model's own transcript
-                    # always reflects the full text it generated, so an
-                    # unconditional clear silently truncates the AUDIO half
-                    # of that pair without the transcript ever knowing.
-                    # Skipping clear when nothing is genuinely in flight
-                    # accepts a small risk (a few hundred ms of trailing
-                    # audio might overlap the agent's next line) in exchange
-                    # for no longer clipping completed turns wholesale.
-                    if realtime.has_active_audible_response():
-                        await websocket.send_text(
-                            json.dumps({"event": "clear", "streamSid": stream_sid})
-                        )
-                        await realtime.cancel_response()
-                    # Gap tracking happens regardless of whether we cleared/
-                    # cancelled anything -- RealtimeClient already computed
-                    # it (negative if this is a true mid-speech interrupt).
+                    activity.set()
+                    # Barge-in: the healthcare agent started talking.
+                    # Flush whatever of our bot's audio Twilio still has
+                    # queued so it stops immediately instead of talking
+                    # over them...
+                    await websocket.send_text(
+                        json.dumps({"event": "clear", "streamSid": stream_sid})
+                    )
+                    # ...and tell OpenAI to actually stop generating that
+                    # response too. Without this the model keeps producing
+                    # the rest of its planned sentence regardless -- more
+                    # audio bleeding through, more transcript text that
+                    # never gets a clean place to land, and a playback-end
+                    # estimate that keeps growing instead of stopping at
+                    # the true interrupt point.
+                    await realtime.cancel_response()
+
+                    # Same signal is the agent's response-latency endpoint --
+                    # RealtimeClient already computed the gap against its
+                    # estimated true playback-end time (negative if this is
+                    # a genuine mid-speech interrupt).
                     pending_gap_ms = realtime.last_gap_ms
                     pending_gap_is_interrupt = realtime.last_gap_is_interrupt
-                    pending_gap_ms_audio = realtime.last_gap_ms_audio
 
-                elif etype == "response.created":
-                    # Gap timing is handled internally by RealtimeClient.
-                    pass
-
-                elif etype == "response.done":
-                    # Safety net: normally response.output_audio_transcript.done
-                    # flushes whatever the caller-bot said. If a response gets
-                    # cancelled mid-generation, that event may never fire for
-                    # it -- without this, any partial sentence our bot actually
-                    # spoke before being cut off would silently vanish from the
-                    # transcript instead of showing up truncated. flush() is a
-                    # no-op if there's nothing pending.
+                    # Whatever the bot actually got out before being cut off
+                    # goes in the transcript now -- don't wait on a
+                    # response.output_audio_transcript.done that a cancelled
+                    # response may never cleanly send.
                     transcript.flush("caller_bot")
 
+                elif etype in ("response.created", "response.done"):
+                    # Playback-end estimate is tracked internally by
+                    # RealtimeClient off of response.created/output_audio.delta;
+                    # nothing to do here.
+                    pass
+
                 elif etype == "response.output_audio_transcript.delta":
-                    if not realtime.is_commentary(event):
-                        transcript.append_delta("caller_bot", event.get("delta", ""))
+                    activity.set()
+                    transcript.append_delta("caller_bot", event.get("delta", ""))
                 elif etype == "response.output_audio_transcript.done":
-                    if not realtime.is_commentary(event):
-                        transcript.flush("caller_bot")
+                    transcript.flush("caller_bot")
 
                 elif etype == "conversation.item.input_audio_transcription.completed":
                     transcript.add_line(
@@ -188,14 +196,14 @@ async def media_stream(websocket: WebSocket):
                         event.get("transcript", ""),
                         gap_ms=pending_gap_ms,
                         is_interrupt=pending_gap_is_interrupt,
-                        gap_ms_audio=pending_gap_ms_audio,
                     )
                     pending_gap_ms = None
                     pending_gap_is_interrupt = False
-                    pending_gap_ms_audio = None
 
                 elif etype == "error":
-                    transcript.add_event_marker(f"OpenAI realtime error: {event.get('error')}")
+                    error_code = (event.get("error") or {}).get("code")
+                    if error_code not in HARMLESS_ERROR_CODES:
+                        transcript.add_event_marker(f"OpenAI realtime error: {event.get('error')}")
 
                 elif etype not in ("session.created", "session.updated"):
                     # GA event names are a recent migration (beta shutdown
@@ -207,26 +215,20 @@ async def media_stream(websocket: WebSocket):
         watchdog_task = asyncio.create_task(opening_watchdog())
         twilio_task = asyncio.create_task(twilio_to_openai())
         openai_task = asyncio.create_task(openai_to_twilio())
+        inactivity_task = asyncio.create_task(inactivity_watchdog())
         try:
-            # Stop as soon as EITHER side ends (e.g. Twilio's "stop" event),
-            # rather than waiting for both -- otherwise a call that already
-            # hung up would sit here until the watchdog timeout instead of
-            # finalizing right away.
+            # Stop as soon as EITHER side ends (e.g. Twilio's "stop" event)
+            # OR the inactivity watchdog decides the call has naturally
+            # concluded, rather than waiting for all of them -- otherwise a
+            # call that's already over would sit idle until the hard
+            # max_duration_sec timeout instead of finalizing right away.
             done, pending = await asyncio.wait(
-                {twilio_task, openai_task},
+                {twilio_task, openai_task, inactivity_task},
                 timeout=scenario["max_duration_sec"],
                 return_when=asyncio.FIRST_COMPLETED,
             )
             if not done:
                 transcript.add_event_marker(f"Hit max_duration_sec watchdog ({scenario['max_duration_sec']}s)")
-            elif twilio_task in done and openai_task in pending:
-                # Twilio ended the stream cleanly -- give OpenAI's trailing
-                # events a brief window to arrive instead of cutting them off.
-                trailing_done, trailing_pending = await asyncio.wait(
-                    {openai_task}, timeout=TRAILING_EVENTS_GRACE_SEC
-                )
-                done |= trailing_done
-                pending = trailing_pending
             for task in pending:
                 task.cancel()
             for task in pending:

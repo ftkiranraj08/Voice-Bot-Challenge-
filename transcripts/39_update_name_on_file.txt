@@ -1,0 +1,31 @@
+Scenario: Change the name on file after routine identity verification (39_update_name_on_file)
+Caller persona: Maria Chen
+Call SID: CAbcebf89289470383e83ab0df7bdcb2a5
+Started: 2026-07-21 19:17:55
+------------------------------------------------------------
+
+[00:00.00] SYSTEM: Call started (streamSid=MZa649c564654a109b02f49e3e9b2795f5, callSid=CAbcebf89289470383e83ab0df7bdcb2a5)
+[00:04.69] AGENT: This call may be recorded for quality and training purposes.
+[00:07.44] AGENT: Para español, oprima el dos.
+[00:10.10] AGENT: Thanks for calling Pivot Point Orthopedics.
+[00:13.31] AGENT: Part of Pretty Good AI. How may I help you today?
+[00:14.80] CALLER (bot): Hi, this is Maria Chen. I’m calling to update the name on my file. I’ve already verified, but just to confirm, my date of birth is July 4th, 2000. I’d like my name changed to Maria Rodriguez.
+[00:38.13] AGENT: (gap: 5751ms) One moment while I process your request to update your name to Maria Rodriguez.
+[00:38.84] CALLER (bot): Thanks, I appreciate that. I’ll wait here while you process it. If you need anything else from me, just let me know.
+[00:54.69] AGENT: Your request to update your name to Maria Rodriguez is being processed and will be reviewed by the clinic staff.
+[00:56.27] AGENT: If you have any other requests?
+[00:57.90] AGENT: Just let me know.
+[00:58.50] CALLER (bot): Okay, sounds good. Thanks for letting me know. I’ll wait to hear back from you, and hopefully it gets sorted soon.
+[00:59.87] AGENT: (gap: -4662ms, MID-SPEECH INTERRUPT) Bura
+[01:00.82] CALLER (bot): I don’t have anything else for now—just waiting to hear back about the update. Thanks again for the help.
+[01:14.52] AGENT: You're all set. The clinic support team will review your request and follow up as soon as possible.
+[01:15.70] AGENT: Have a great day.
+[01:16.15] CALLER (bot): Thanks, you too. Have a great day. Goodbye.
+[01:19.33] SYSTEM: Twilio sent stop event
+
+------------------------------------------------------------
+Turn-taking summary:
+  Turns measured: 2
+  Average gap: 544ms
+  Flagged: 0 short gap(s), 1 mid-speech interrupt(s)
+    [00:59.87] gap=-4662ms MID-SPEECH INTERRUPT

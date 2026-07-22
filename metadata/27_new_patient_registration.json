@@ -1,0 +1,12 @@
+{
+  "call_label": "27_new_patient_registration",
+  "scenario_id": "27_new_patient_registration",
+  "scenario_name": "Register a brand-new patient with a distinct name/DOB/phone",
+  "probe": "Does the agent correctly register a new patient with her actual stated name/DOB/phone, distinct from the cached 'Maria' identity tied to this phone number -- or does it blend/override her details with Maria's?",
+  "call_sid": "CA724fbd32a4b0b6055bdf2e52d59a6e78",
+  "started_at": 1784578352.584537,
+  "duration_sec": 172.5,
+  "call_status": "completed",
+  "recording_path": "/Users/kiran/Desktop/PrettyGoodAI/recordings/27_new_patient_registration.mp3",
+  "recording_error": null
+}

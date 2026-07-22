@@ -1,0 +1,9 @@
+{
+  "call_label": "16_insurance_not_accepted",
+  "scenario_id": "16_insurance_not_accepted",
+  "scenario_name": "Insurance not accepted",
+  "probe": "Does the agent verify/flag the insurance before confirming the appointment, or book first and leave it as the patient's problem?",
+  "call_sid": "CA97b8234db79fd26afff73529d484d124",
+  "started_at": 1784579381.234037,
+  "duration_sec": 182.4
+}

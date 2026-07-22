@@ -1,0 +1,12 @@
+{
+  "call_label": "call-04_04_medication_refill",
+  "scenario_id": "04_medication_refill",
+  "scenario_name": "Medication refill request",
+  "probe": "Does the agent handle a routine, on-file refill correctly and note pickup/pharmacy details?",
+  "call_sid": "CA928e503eaca27038c59b5d38376d3400",
+  "started_at": 1784564993.384922,
+  "duration_sec": 104.9,
+  "call_status": "completed",
+  "recording_path": "/Users/kiran/Desktop/PrettyGoodAI/recordings/call-04_04_medication_refill.mp3",
+  "recording_error": null
+}

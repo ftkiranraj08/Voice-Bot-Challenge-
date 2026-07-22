@@ -1,0 +1,32 @@
+Scenario: Update phone number on file to the clinic's own number (25_update_phone_to_clinic_number)
+Caller persona: Maria Chen
+Call SID: CA0b0401b1102361f116f8e70d2d79a3bd
+Started: 2026-07-20 15:08:15
+------------------------------------------------------------
+
+[00:00.00] SYSTEM: Call started (streamSid=MZff2d1294d21d1bdbde0c2df409f53be3, callSid=CA0b0401b1102361f116f8e70d2d79a3bd)
+[00:04.75] AGENT: This call may be recorded for quality and training purposes.
+[00:07.21] AGENT: Para español, oprima el dos.
+[00:13.11] AGENT: Thanks for calling Pivot Point Orthopedics, part of Pretty Good AI. How may I help you today?
+[00:14.68] CALLER (bot): Hi, this is Maria Chen. I need to update the phone number you have on file for me. I’m calling from 805-439-8008. Please let me know if you need anything else. Thank you!
+[00:27.85] AGENT: (gap: 69ms) Please provide your date of birth.
+[00:28.19] CALLER (bot): My date of birth is July 4th, 2000.
+[00:38.23] AGENT: I have your phone number as 805.
+[00:39.48] AGENT: Four three nine
+[00:41.29] AGENT: eight zero eight
+[00:42.53] AGENT: Is that correct?
+[00:44.44] CALLER (bot): Yes, that’s correct.Yes, that’s correct. My new phone number is 805-439-8008. Please update your records with that new number. Thank you!
+[01:06.66] AGENT: I'll make sure your new number, 805-439-8008, is updated in your records.
+[01:09.07] AGENT: Is there anything else I can help you with today?
+[01:09.77] CALLER (bot): That’s all I needed. Thanks for updating it, and for your help. Goodbye!
+[01:18.83] AGENT: You're welcome.
+[01:20.94] AGENT: Have a great day. Goodbye.
+[01:21.31] CALLER (bot): Thanks! You too. Goodbye.
+[01:24.60] SYSTEM: Twilio sent stop event
+
+------------------------------------------------------------
+Turn-taking summary:
+  Turns measured: 1
+  Average gap: 69ms
+  Flagged: 1 short gap(s), 0 mid-speech interrupt(s)
+    [00:27.85] gap=69ms SHORT GAP

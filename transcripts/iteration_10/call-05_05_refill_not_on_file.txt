@@ -1,0 +1,45 @@
+Scenario: Refill request for a medication not on file (05_refill_not_on_file)
+Caller persona: Angela Torres
+Call SID: CA6d1d8be66c94abbf1b5b191d4acbad23
+Started: 2026-07-20 12:31:53
+------------------------------------------------------------
+
+[00:00.00] SYSTEM: Call started (streamSid=MZf8421ae0bca1f549264669ddd23bd4ca, callSid=CA6d1d8be66c94abbf1b5b191d4acbad23)
+[00:05.06] AGENT: This call may be recorded for quality and training purposes.
+[00:07.54] AGENT: Para español, oprima el dos.
+[00:13.98] AGENT: Thanks for calling Pivot Point Orthopedics, part of Pretty Good AI. How may I help you today?
+[00:17.14] CALLER (bot): Hi there, thanks for the context—let me think through how to handle this call.Hi, I’m just trying to get a hold of someone who can help me with a medication refill. I’m looking to get a refill for sertraline 100 milligrams. I’m a bit puzzled, though, because I don’t know if it’s ever been prescribed to me by this clinic before. If you can’t find it on file, that’s completely fine—could you let me know what my options are?
+[00:32.42] AGENT: (gap: -10402ms, MID-SPEECH INTERRUPT) I see you're calling from the number we have on file.
+[00:34.01] AGENT: Am I speaking with Maria?
+[00:35.79] CALLER (bot): I’m not sure. This is the first time I’ve heard someone’s name mentioned, so I don’t really know. I’m just calling about the refill, sertraline 100 milligrams, and I’m not sure if it’s ever been prescribed here before.
+[00:41.87] AGENT: (gap: -8700ms, MID-SPEECH INTERRUPT) No problem. Please provide your full name and date of birth.
+[00:44.84] CALLER (bot): My name is Angela Torres. My date of birth is July twentieth, nineteen eighty eight.
+
+I know I probably sound a little unsure—I’m not sure this clinic has prescribed sertraline 100 milligrams for me. If you can’t find it on file, I’d like to know what steps I can take, like whether I need to see a doctor, try another medication, or if there’s some kind of clinic process I should follow.
+[01:19.58] AGENT: Just to confirm, I have your name as Angela Torres and your date of birth as July 20, 1988.
+[01:25.48] AGENT: Is that correct? If so, I'll move forward. If not, please spell out your first and last name for me.
+[01:27.60] CALLER (bot): Yes, that’s correct. My name is Angela Torres, and my date of birth is July twentieth, 1988.
+
+So yes, please go ahead. I’m fine with whatever comes next, I’m just a bit puzzled because I’m not sure about the prescription history for sertraline.
+[01:42.26] AGENT: (gap: -6168ms, MID-SPEECH INTERRUPT) Could you please spell out your first and last name for me? This will help me look up your record.
+[01:44.72] CALLER (bot): Sure. It’s Angela, spelled A N G E L A, and Torres, spelled T O R R E S. That’s my name, and I need help with a refill request for sertraline 100 milligrams. I’m not sure if it’s ever been prescribed here before, so I’d appreciate guidance on what to do next.
+[02:00.93] AGENT: If your phone number is two-one-three
+[02:02.20] AGENT: 238
+[02:04.11] AGENT: six-five-six-seven
+[02:07.48] AGENT: And your date of birth is July 20, 1988?
+[02:08.50] AGENT: Is that correct?
+[02:11.94] CALLER (bot): Yes, that’s correct—the phone number ending in 238-6567 is the one on file, and my date of birth is July twentieth, 1988. Thanks for confirming. Now, about the sertraline 100 milligram refill—I’m not sure it’s ever been prescribed by this clinic before. If there’s no record, what options do I have—can a clinician review it, or would I need to see a provider first? I’m just trying to figure out the next step.
+[02:55.32] AGENT: (gap: 4372ms) I can't proceed further right now, but I can make sure our clinic support team follows up with you. Please stay on the line while I document your request for a medication refill and your questions about next steps if there's no record on file.
+[02:56.98] CALLER (bot): Okay, thank you for letting me know. I can stay here and wait while you document everything.
+
+I really just want to understand what happens next—whether the clinic can access my records, or if I need to contact my prescribing doctor elsewhere to get it updated. I appreciate you taking the time to look into it.
+[03:00.35] SYSTEM: Hit max_duration_sec watchdog (180s)
+
+------------------------------------------------------------
+Turn-taking summary:
+  Turns measured: 4
+  Average gap: -5224ms
+  Flagged: 0 short gap(s), 3 mid-speech interrupt(s)
+    [00:32.42] gap=-10402ms MID-SPEECH INTERRUPT
+    [00:41.87] gap=-8700ms MID-SPEECH INTERRUPT
+    [01:42.26] gap=-6168ms MID-SPEECH INTERRUPT

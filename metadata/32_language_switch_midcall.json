@@ -1,0 +1,12 @@
+{
+  "call_label": "32_language_switch_midcall",
+  "scenario_id": "32_language_switch_midcall",
+  "scenario_name": "Switch from English to Spanish halfway through the call",
+  "probe": "Does the agent detect and follow the switch to Spanish, responding appropriately in Spanish (or at least acknowledging it), or does it keep responding in English regardless, get confused, or lose track of the conversation across the switch?",
+  "call_sid": "CA258b15f16c8190ef3f6a39706587a598",
+  "started_at": 1784583549.429845,
+  "duration_sec": 182.6,
+  "call_status": "completed",
+  "recording_path": "/Users/kiran/Desktop/PrettyGoodAI/recordings/32_language_switch_midcall.mp3",
+  "recording_error": null
+}

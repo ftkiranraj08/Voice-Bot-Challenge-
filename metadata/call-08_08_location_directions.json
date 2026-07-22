@@ -1,0 +1,12 @@
+{
+  "call_label": "call-08_08_location_directions",
+  "scenario_id": "08_location_directions",
+  "scenario_name": "Location/directions question",
+  "probe": "Does the agent give a specific, plausible address rather than a vague or fabricated one?",
+  "call_sid": "CA328ef97ffb62b02eada07b9554018928",
+  "started_at": 1784566526.6750689,
+  "duration_sec": 70.4,
+  "call_status": "completed",
+  "recording_path": "/Users/kiran/Desktop/PrettyGoodAI/recordings/call-08_08_location_directions.mp3",
+  "recording_error": null
+}

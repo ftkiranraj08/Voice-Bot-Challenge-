@@ -1,0 +1,36 @@
+Scenario: Medication refill request (04_medication_refill)
+Caller persona: James Whitfield
+Call SID: CA928e503eaca27038c59b5d38376d3400
+Started: 2026-07-20 12:29:53
+------------------------------------------------------------
+
+[00:00.00] SYSTEM: Call started (streamSid=MZa0a2b2349326be773bb1cc664a5cbf93, callSid=CA928e503eaca27038c59b5d38376d3400)
+[00:04.56] AGENT: This call may be recorded for quality and training purposes.
+[00:06.96] AGENT: Para español, oprima el dos.
+[00:13.34] AGENT: Thanks for calling Pivot Point Orthopedics, part of Pretty Good AI. How may I help you today?
+[00:14.51] CALLER (bot): Hi, this is James Whitfield. I’m calling to request a refill for my blood pressure medication, lisinopril. It’s on file with you and I take it regularly. I just need the refill process started, if that’s okay.
+[00:24.00] AGENT: (gap: -7625ms, MID-SPEECH INTERRUPT) I see you're calling from the number we have on file. Am I speaking with Maria?
+[00:25.31] CALLER (bot): Okay, let me respond to that and keep things moving toward the refill request.No, this is James Whitfield. I’m not Maria, but I can help with the refill request.
+[00:28.80] AGENT: (gap: -8451ms, MID-SPEECH INTERRUPT) Please provide your date of birth.
+[00:29.34] CALLER (bot): My date of birth is June 14, 1981.
+[00:40.96] AGENT: (gap: 3689ms) The birthday doesn't match our records, but for demo purposes I'll accept it.
+[00:43.91] AGENT: How can I help you today?
+[00:45.18] CALLER (bot): I’m calling to request a refill for my blood pressure medication, lisinopril. I take it regularly, and it’s already on file with the clinic. I just need the refill requested.
+[01:07.43] AGENT: (gap: 2527ms) I don't see any medications on your chart that I can refill right now. If you'd like, I can connect you to our patient support team to help with this. Would you like me to transfer you?
+[01:08.88] CALLER (bot): That seems odd, because I know it’s on file. But if you don’t see it, I’d like to get it resolved. Yes, please connect me to the patient support team so they can sort out the refill or figure out what’s missing.
+[01:21.99] AGENT: (gap: -3557ms, MID-SPEECH INTERRUPT) Connecting you to a representative. Please wait.
+[01:22.08] CALLER (bot): Thanks, I’ll wait. If someone picks up, I’ll explain the situation,
+[01:23.30] AGENT: (gap: -2802ms, MID-SPEECH INTERRUPT) Hello.
+[01:26.70] AGENT: You've reached the pretty good AI test line. Goodbye.
+[01:27.82] CALLER (bot): Hello, thanks for the call. I’m here for the refill request—lisinopril on file. I guess I’ll talk to the representative and see what they find. Goodbye.
+[01:42.88] SYSTEM: Twilio sent stop event
+
+------------------------------------------------------------
+Turn-taking summary:
+  Turns measured: 6
+  Average gap: -2703ms
+  Flagged: 0 short gap(s), 4 mid-speech interrupt(s)
+    [00:24.00] gap=-7625ms MID-SPEECH INTERRUPT
+    [00:28.80] gap=-8451ms MID-SPEECH INTERRUPT
+    [01:21.99] gap=-3557ms MID-SPEECH INTERRUPT
+    [01:23.30] gap=-2802ms MID-SPEECH INTERRUPT

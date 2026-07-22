@@ -1,0 +1,12 @@
+{
+  "call_label": "call-06_06_office_hours",
+  "scenario_id": "06_office_hours",
+  "scenario_name": "Office hours question",
+  "probe": "Does the agent state accurate, consistent hours (cross-check against scenario 11's weekend probe)?",
+  "call_sid": "CA0458f4446c8675c2436507db18972632",
+  "started_at": 1784566264.204948,
+  "duration_sec": 84.8,
+  "call_status": "completed",
+  "recording_path": "/Users/kiran/Desktop/PrettyGoodAI/recordings/call-06_06_office_hours.mp3",
+  "recording_error": null
+}

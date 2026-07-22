@@ -1,0 +1,65 @@
+Scenario: Simple new appointment scheduling (01_new_appointment)
+Caller persona: Maria Chen
+Call SID: CA911dfcc76de3f83daac9be46c48fdebd
+Started: 2026-07-20 11:51:33
+------------------------------------------------------------
+
+[00:00.00] SYSTEM: Call started (streamSid=MZ85eefd17a2294cc2ab35c4ee59707e2a, callSid=CA911dfcc76de3f83daac9be46c48fdebd)
+[00:01.18] SYSTEM: OpenAI realtime error: {'type': 'invalid_request_error', 'code': 'response_cancel_not_active', 'message': 'Cancellation failed: no active response found', 'param': None, 'event_id': None}
+[00:05.04] AGENT: This call may be recorded for quality and training purposes.
+[00:05.05] SYSTEM: OpenAI realtime error: {'type': 'invalid_request_error', 'code': 'response_cancel_not_active', 'message': 'Cancellation failed: no active response found', 'param': None, 'event_id': None}
+[00:07.30] CALLER (bot): Hi, I want to schedule
+[00:07.46] AGENT: (gap: -746ms, MID-SPEECH INTERRUPT) Para español, oprima el dos.
+[00:07.47] SYSTEM: OpenAI realtime error: {'type': 'invalid_request_error', 'code': 'response_cancel_not_active', 'message': 'Cancellation failed: no active response found', 'param': None, 'event_id': None}
+[00:13.41] AGENT: Thanks for calling Pivot Point Orthopedics, part of Pretty Good AI. How may I help you today?
+[00:14.85] CALLER (bot): Hi, thanks for picking up. I’d like to schedule a routine check-up with a doctor. I don’t have a specific day or time in mind, just sometime next week if that’s possible. You can tell me what openings you have, and I’ll do my best to work with them.
+[00:23.75] SYSTEM: OpenAI realtime error: {'type': 'invalid_request_error', 'code': 'response_cancel_not_active', 'message': 'Cancellation failed: no active response found', 'param': None, 'event_id': None}
+[00:26.72] AGENT: I see you're calling from the number we have on file.
+[00:26.73] SYSTEM: OpenAI realtime error: {'type': 'invalid_request_error', 'code': 'response_cancel_not_active', 'message': 'Cancellation failed: no active response found', 'param': None, 'event_id': None}
+[00:28.30] AGENT: Warst du mit Maria?
+[00:29.09] CALLER (bot): Yep, this is Maria speaking. Thanks for asking. I’m calling about booking a routine check-up, and I’m happy to give any details you need to help set it up.
+[00:31.22] SYSTEM: OpenAI realtime error: {'type': 'invalid_request_error', 'code': 'response_cancel_not_active', 'message': 'Cancellation failed: no active response found', 'param': None, 'event_id': None}
+[00:33.29] AGENT: (gap: -6362ms, MID-SPEECH INTERRUPT) Please provide your date of birth.
+[00:33.49] CALLER (bot): My date of birth is May 14, 1986.
+[00:43.19] SYSTEM: OpenAI realtime error: {'type': 'invalid_request_error', 'code': 'response_cancel_not_active', 'message': 'Cancellation failed: no active response found', 'param': None, 'event_id': None}
+[00:44.85] AGENT: Thanks, Maria.
+[00:44.86] SYSTEM: OpenAI realtime error: {'type': 'invalid_request_error', 'code': 'response_cancel_not_active', 'message': 'Cancellation failed: no active response found', 'param': None, 'event_id': None}
+[00:50.17] AGENT: You'd like to schedule a routine checkup with a doctor, which is considered a general office visit.
+[00:50.18] SYSTEM: OpenAI realtime error: {'type': 'invalid_request_error', 'code': 'response_cancel_not_active', 'message': 'Cancellation failed: no active response found', 'param': None, 'event_id': None}
+[00:50.89] AGENT: Is that correct?
+[00:51.87] CALLER (bot): Yes, that’s right. I’d like to schedule a general office visit for a routine check-up. If you have openings next week, I’m flexible and can try one of those slots.
+[00:54.81] SYSTEM: OpenAI realtime error: {'type': 'invalid_request_error', 'code': 'response_cancel_not_active', 'message': 'Cancellation failed: no active response found', 'param': None, 'event_id': None}
+[01:00.21] AGENT: (gap: -5475ms, MID-SPEECH INTERRUPT) Do you have a specific doctor you'd like to see, or are you open to any available provider?
+[01:00.93] CALLER (bot): I’m actually open to seeing any available provider for this routine check-up. Whoever is scheduling availability next week, that’s fine with me. I just want to get something on the calendar.
+[01:11.34] SYSTEM: OpenAI realtime error: {'type': 'invalid_request_error', 'code': 'response_cancel_not_active', 'message': 'Cancellation failed: no active response found', 'param': None, 'event_id': None}
+[01:17.42] AGENT: (gap: 862ms) Let me check for available routine checkup appointments with any provider starting next week.
+[01:19.00] CALLER (bot): Okay, thanks for checking. Let me think through the details while we wait.Sounds good—I’ll wait here. If you need any additional info while you’re checking, I’m happy to provide it. Just let me know when there’s a time slot available.
+[01:26.16] SYSTEM: OpenAI realtime error: {'type': 'invalid_request_error', 'code': 'response_cancel_not_active', 'message': 'Cancellation failed: no active response found', 'param': None, 'event_id': None}
+[01:39.83] AGENT: It appears you already have a routine checkup appointment booked. If you'd like, I can help you reschedule or cancel that appointment, or transfer you to live support for more options.
+[01:39.84] SYSTEM: OpenAI realtime error: {'type': 'invalid_request_error', 'code': 'response_cancel_not_active', 'message': 'Cancellation failed: no active response found', 'param': None, 'event_id': None}
+[01:40.36] AGENT: What would you like to do?
+[01:41.83] CALLER (bot): I’d like to reschedule, if possible. I’m happy to cancel the current appointment if it’s easier, but I really just want a routine check-up next week, so whatever fits best is fine.
+[01:48.78] SYSTEM: OpenAI realtime error: {'type': 'invalid_request_error', 'code': 'response_cancel_not_active', 'message': 'Cancellation failed: no active response found', 'param': None, 'event_id': None}
+[01:55.68] AGENT: I'm unable to reschedule or cancel appointments directly, but I can connect you to live support for help with this.
+[01:55.69] SYSTEM: OpenAI realtime error: {'type': 'invalid_request_error', 'code': 'response_cancel_not_active', 'message': 'Cancellation failed: no active response found', 'param': None, 'event_id': None}
+[01:57.63] AGENT: Would you like me to transfer you now?
+[01:58.19] CALLER (bot): Yes, please go ahead and transfer me. I appreciate you helping with this. I just want to get the appointment set for next week, and live support can help. Thanks.
+[02:02.66] SYSTEM: OpenAI realtime error: {'type': 'invalid_request_error', 'code': 'response_cancel_not_active', 'message': 'Cancellation failed: no active response found', 'param': None, 'event_id': None}
+[02:06.24] AGENT: (gap: -3739ms, MID-SPEECH INTERRUPT) Connecting you to a representative. Please wait.
+[02:06.55] CALLER (bot): Sounds good—I’ll wait for the representative. Thanks for your help so far.
+[02:06.65] SYSTEM: OpenAI realtime error: {'type': 'invalid_request_error', 'code': 'response_cancel_not_active', 'message': 'Cancellation failed: no active response found', 'param': None, 'event_id': None}
+[02:07.86] AGENT: Hello.
+[02:07.87] SYSTEM: OpenAI realtime error: {'type': 'invalid_request_error', 'code': 'response_cancel_not_active', 'message': 'Cancellation failed: no active response found', 'param': None, 'event_id': None}
+[02:11.32] AGENT: You've reached the Pretty Good AI Test Line. Goodbye.
+[02:12.03] CALLER (bot): Thanks for your time, and sorry I couldn’t get through to a live representative. I’ll hang up now—have a good day.
+[02:22.68] SYSTEM: Twilio sent stop event
+
+------------------------------------------------------------
+Turn-taking summary:
+  Turns measured: 5
+  Average gap: -3092ms
+  Flagged: 0 short gap(s), 4 mid-speech interrupt(s)
+    [00:07.46] gap=-746ms MID-SPEECH INTERRUPT
+    [00:33.29] gap=-6362ms MID-SPEECH INTERRUPT
+    [01:00.21] gap=-5475ms MID-SPEECH INTERRUPT
+    [02:06.24] gap=-3739ms MID-SPEECH INTERRUPT

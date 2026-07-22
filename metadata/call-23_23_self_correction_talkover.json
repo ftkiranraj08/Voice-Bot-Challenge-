@@ -1,0 +1,12 @@
+{
+  "call_label": "call-23_23_self_correction_talkover",
+  "scenario_id": "23_self_correction_talkover",
+  "scenario_name": "Caller talks over their own correction",
+  "probe": "Does the agent grab the first (wrong) value and act on it, or correctly wait for/register the self-correction before confirming?",
+  "call_sid": "CA969aa774d47be00679e4f9571dbd7ff5",
+  "started_at": 1784569875.8861701,
+  "duration_sec": 147.6,
+  "call_status": "completed",
+  "recording_path": "/Users/kiran/Desktop/PrettyGoodAI/recordings/call-23_23_self_correction_talkover.mp3",
+  "recording_error": null
+}
