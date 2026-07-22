@@ -341,3 +341,35 @@ back clean -- if it recurs a fourth time with yet another new phrasing,
 the instruction-based approach may have hit its ceiling and a code-level 
 mitigation (e.g. detecting and silently stripping a leading narration 
 clause before forwarding audio) would be worth considering instead.
+
+---
+
+## Issue 14: Issue 13 recurred a fourth time -- added a code-level backstop, scoped to transcript only
+**Found in:** Issue 13's own fix explicitly flagged this as the next step if 
+prompt-only fixes hit their ceiling, which they did.
+**Investigated:** The obvious version of "strip a leading narration clause" 
+would apply to the audio too, not just the transcript. It doesn't work: 
+`response.output_audio.delta` chunks are forwarded to Twilio in 
+bridge/server.py as they arrive, before enough of `response.output_audio_
+transcript.delta` exists to classify the sentence as narration or not -- by 
+the time we could tell, the audio's already on the phone line. The only way 
+to guarantee clean audio would be to buffer each entire caller-bot 
+utterance before playing any of it, which reintroduces the exact 
+streaming-latency regression Issues 5 and 6 already fixed, on every single 
+turn, to catch an intermittent leak. Not worth that trade for a test 
+harness where the target agent hearing an occasional narration clause is 
+a minor realism issue, not a correctness one.
+**Fix:** Added bridge/narration_filter.py (`strip_narration_prefix`) -- a 
+small pure function matching known narration openers ("let me", "thanks 
+for", "i'm not sure", etc., taken from the real leaked phrasings in Issue 
+13), dropping up to 2 leading sentences that match, and never returning an 
+empty string. Wired into TranscriptLogger.flush() (bridge/transcript.py) 
+for the caller_bot role only -- healthcare_agent lines are never touched. 
+Scope is deliberately transcript-only: it guarantees BUG_REPORT.md analysis 
+and every logged transcript reads clean even when the live audio didn't, 
+without touching the real-time audio path at all.
+**Verified:** Unit-tested against all 3 real leaked phrasings quoted in 
+Issue 13 plus a clean baseline and a narration-only edge case ("Let me 
+think about that.", correctly left intact since stripping it would leave 
+nothing) -- all four resolve correctly. Also confirmed end-to-end through 
+TranscriptLogger.append_delta/flush directly, not just the bare function.

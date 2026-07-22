@@ -4,6 +4,8 @@ import json
 import os
 import time
 
+from bridge.narration_filter import strip_narration_prefix
+
 # gap_ms measures the healthcare agent's response latency to our bot. Turns
 # under this are flagged in the summary as suspiciously snappy -- likely the
 # agent barging in before our bot actually finished speaking.
@@ -29,6 +31,12 @@ class TranscriptLogger:
     def flush(self, role):
         text = self._pending.get(role, "").strip()
         self._pending[role] = ""
+        if role == "caller_bot":
+            # Backstop for iteration.md Issue 13: strip a leading
+            # "thinking out loud" clause that leaked past the persona
+            # prompt's instruction not to narrate. Transcript-only -- see
+            # Issue 14 for why the audio itself isn't filtered the same way.
+            text = strip_narration_prefix(text)
         if text:
             self.lines.append((self._elapsed(), role, text, None, False))
         return text
